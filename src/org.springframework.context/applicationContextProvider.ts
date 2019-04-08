@@ -1,9 +1,9 @@
 import {
-  ApplicationContextAware,
+  IApplicationContextAware,
   IApplicationContext
 } from "./applicationContext";
 
-export class ApplicationContextProvider implements ApplicationContextAware {
+export class ApplicationContextProvider implements IApplicationContextAware {
   public context: IApplicationContext;
 
   private static instance: ApplicationContextProvider = null;

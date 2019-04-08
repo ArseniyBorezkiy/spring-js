@@ -21,4 +21,6 @@ export interface IBeanFactory {
     required?: boolean,
     extraBeanPathMap?: Map<any, TWishedBeanOrFactory>
   ): T | null;
+
+  set(key: Symbol, value: TWishedBeanOrFactory);
 }

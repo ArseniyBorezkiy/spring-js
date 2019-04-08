@@ -5,3 +5,5 @@ export * from "./applicationContextEvent";
 export * from "./applicationContextProvider";
 export * from "./lifecycle";
 export * from "./abstractApplicationContext";
+export * from "./resourceLoader";
+export * from "./jsonUrlApplicationContext";

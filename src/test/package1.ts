@@ -48,6 +48,7 @@ export class TestBean1_1 {
 @Bean(TestBean1_2_Token)
 export class TestBean1_2 {
   @Autowired(TestBean1_1_Token) public bean1: TestBean1_1;
+  // @Resource("https://...", { required: false }) public resource1: Promise<any>;
 
   getName() {
     return "Bean 1_2";

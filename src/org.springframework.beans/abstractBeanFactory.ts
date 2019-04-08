@@ -1,5 +1,10 @@
 import { ICloseable, Exception } from "../java";
-import { preDestroyHooksToken, postConstructHooksToken } from "../javax";
+import {
+  preDestroyHooksToken,
+  postConstructHooksToken,
+  resourceDependenciesToken,
+  TResource
+} from "../javax";
 import { disposableToken } from "../rxjava";
 import { beansToken } from "../org.springframework.context/annotations";
 import { ILifecycle } from "../org.springframework.context/lifecycle";
@@ -11,6 +16,7 @@ import {
 } from "./annotations";
 import { FactoryBean } from "./factoryBean";
 import { TWishedBeanOrFactory, IBeanFactory, IResolver } from "./factory";
+import { IResourceLoader } from "../org.springframework.context/resourceLoader";
 
 //
 // Types
@@ -22,12 +28,16 @@ const emptyMap = new Map<any, TWishedBeanOrFactory>();
 // BeanFactory is a Ioc container
 //
 
+const PFX = "[ABSTRACT BEAN FACTORY]:";
+
 export abstract class AbstractBeanFactory
-  implements IBeanFactory, ILifecycle, ICloseable {
+  implements IBeanFactory, ILifecycle, ICloseable, IResourceLoader {
   public beansMap: Map<any, any>;
   public beanPathMap: Map<any, any>;
-  protected parentBeanFactory: AbstractBeanFactory;
   protected running = false;
+  protected static resources: any = {};
+
+  protected abstract parentBeanFactory: AbstractBeanFactory;
 
   static beansMap: Map<any, any> = new Map();
 
@@ -35,7 +45,6 @@ export abstract class AbstractBeanFactory
   constructor() {
     this.beansMap = new Map();
     this.beanPathMap = new Map();
-    this.parentBeanFactory = null;
   }
 
   // retrieve instantiated bean from cache
@@ -62,6 +71,10 @@ export abstract class AbstractBeanFactory
 
   public set(key: Symbol, value: TWishedBeanOrFactory) {
     this.beanPathMap.set(key, value);
+  }
+
+  public unset(key: Symbol) {
+    this.beanPathMap.delete(key);
   }
 
   // set bean map
@@ -99,7 +112,7 @@ export abstract class AbstractBeanFactory
     }
 
     if (!key) {
-      throw new Exception("disposeBean: No such bean instance");
+      throw new Exception(`${PFX} no such bean instance`);
     }
 
     const bean = value;
@@ -130,7 +143,7 @@ export abstract class AbstractBeanFactory
     }
 
     if (!key) {
-      throw new Exception("destroyBean: No such bean instance");
+      throw new Exception(`${PFX} no such bean instance`);
     }
 
     const bean = value;
@@ -157,7 +170,7 @@ export abstract class AbstractBeanFactory
     extraBeanPathMap = extraBeanPathMap || emptyMap;
 
     if (wishedBean == null) {
-      throw new Exception(`getBean: "wishedBean" should be not null`);
+      throw new Exception(`${PFX} wished bean should not be null`);
     }
 
     // 1. resolve string path
@@ -262,88 +275,127 @@ export abstract class AbstractBeanFactory
   ): T | null {
     // 1. check beans definitions exists in package
     if (!Reflect.hasMetadata(beansToken, AbstractBeanFactory)) {
-      throw new Exception(`getBeanByToken: No beans found in class Context`);
+      throw new Exception(`${PFX} no beans found in context`);
     }
 
     // 2. find bean definition by type
-    const beanDefenitions: TBeanDefinition<T>[] = Reflect.getMetadata(
+    const beanDefinitions: TBeanDefinition<T>[] = Reflect.getMetadata(
       beansToken,
       AbstractBeanFactory
     );
-    const beanDefenition: TBeanDefinition<T> = beanDefenitions.find(
-      (beanDefenition: TBeanDefinition<T>) => beanDefenition.token === token
+    const beanDefinition: TBeanDefinition<T> = beanDefinitions.find(
+      (beanDefinition: TBeanDefinition<T>) => beanDefinition.token === token
     ) as TBeanDefinition<T>;
 
-    if (!beanDefenition) {
+    if (!beanDefinition) {
       if (required) {
-        console.log("Symbol caused error", token);
+        console.log(
+          `${PFX} bean with such token not provided in context`,
+          token
+        );
         throw new Exception(
-          `getBeanByToken: Bean with token not provided in Context`
+          `${PFX} bean with such token not provided in context`
         );
       }
 
       return null;
     }
 
-    if (beanDefenition.factory == null) {
-      throw new Exception(
-        `getBeanByToken: Bean definition should have factory "${beanDefenition}"`
-      );
+    if (beanDefinition.factory == null && beanDefinition.bean == null) {
+      throw new Exception(`${PFX} incorrect bean definition`);
     }
 
     // 3. get instance
     let bean: T;
-    if (beanDefenition.scope === "singleton") {
-      bean = this.findSingletonInstance(beanDefenition.token);
+    if (beanDefinition.scope === "singleton") {
+      bean = this.findSingletonInstance(beanDefinition.token);
       if (!bean) {
         // instantiate
-        const type = beanDefenition.factory.prototype;
-        bean = new type.constructor(this);
-        this.beansMap.set(beanDefenition.token, bean);
-        this.autowire<T>(bean, beanDefenition, extraBeanPathMap);
+        bean = this.instantiateBean(beanDefinition);
+        this.beansMap.set(beanDefinition.token, bean);
+        this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
+        this.resource<T>(bean, beanDefinition);
       }
-    } else if (beanDefenition.scope === "global") {
-      bean = this.findGlobalInstance(beanDefenition.token);
+    } else if (beanDefinition.scope === "global") {
+      bean = this.findGlobalInstance(beanDefinition.token);
       if (!bean) {
         // instantiate
-        const type = beanDefenition.factory.prototype;
-        bean = new type.constructor(this);
-        AbstractBeanFactory.beansMap.set(beanDefenition.token, bean);
-        this.autowire<T>(bean, beanDefenition, extraBeanPathMap);
+        bean = this.instantiateBean(beanDefinition);
+        AbstractBeanFactory.beansMap.set(beanDefinition.token, bean);
+        this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
+        this.resource<T>(bean, beanDefinition);
       }
-    } else if (beanDefenition.scope === "prototype") {
+    } else if (beanDefinition.scope === "prototype") {
       // instantiate
-      const type = beanDefenition.factory.prototype;
-      bean = new type.constructor(this);
+      bean = this.instantiateBean(beanDefinition);
       this.beansMap.set(Symbol(), bean);
-      this.autowire<T>(bean, beanDefenition, extraBeanPathMap);
+      this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
+      this.resource<T>(bean, beanDefinition);
     } else {
-      throw new Exception(
-        `getBeanByToken: Unsupported scope ${beanDefenition.scope}`
-      );
+      throw new Exception(`${PFX} usupported scope - ${beanDefinition.scope}`);
     }
 
-    // 4. call post construct hook
-    if (Reflect.hasMetadata(postConstructHooksToken, bean.constructor)) {
-      const postConstructHook = Reflect.getMetadata(
-        postConstructHooksToken,
-        bean.constructor
-      );
-      bean[postConstructHook].call(bean);
+    if (beanDefinition.factory != null) {
+      // 4. for configuration bean register all declared @beans
+      if (Reflect.hasMetadata(beansToken, bean.constructor)) {
+        const beansDefinitions = Reflect.getMetadata(
+          beansToken,
+          bean.constructor
+        );
+        beansDefinitions.forEach((beanDefinition: TBeanDefinition<any>) => {
+          // register additional bean
+          const beanDefinitions =
+            Reflect.getMetadata(beansToken, AbstractBeanFactory) || [];
+          Reflect.defineMetadata(
+            beansToken,
+            [
+              {
+                ...beanDefinition,
+                bean
+              },
+              ...beanDefinitions
+            ],
+            AbstractBeanFactory
+          );
+          this.unset(beanDefinition.token);
+        });
+      }
+
+      // 5. call post construct hook
+      if (Reflect.hasMetadata(postConstructHooksToken, bean.constructor)) {
+        const postConstructHook = Reflect.getMetadata(
+          postConstructHooksToken,
+          bean.constructor
+        );
+        bean[postConstructHook].call(bean);
+      }
     }
 
     return bean;
   }
 
+  private instantiateBean<T>(beanDefinition: TBeanDefinition<T>): T {
+    if (beanDefinition.factory != null) {
+      const type = beanDefinition.factory.prototype;
+      return new type.constructor(this);
+    }
+
+    if (!beanDefinition.bean) {
+      throw new Exception(`${PFX} bean should not be null`);
+    }
+
+    return beanDefinition.bean[beanDefinition.factoryProperty].call(
+      beanDefinition.bean
+    );
+  }
+
   private autowire<T>(
     bean: T,
-    beanDefenition: TBeanDefinition<T>,
+    beanDefinition: TBeanDefinition<T>,
     extraBeanPathMap: Map<any, TWishedBeanOrFactory>
   ) {
-    if (bean.constructor == null) {
-      throw new Exception(
-        `autowire: Trying inject dependencies to not a bean (no constructor) "${bean}"`
-      );
+    if (!beanDefinition.factory) {
+      return;
     }
 
     if (Reflect.hasMetadata(dependenciesToken, bean.constructor)) {
@@ -358,13 +410,13 @@ export abstract class AbstractBeanFactory
         if (!propertyValue) {
           if (dependency.wishedBean == null) {
             throw new Exception(
-              `autowire: Wished bean should not be null in dependency defenition for property "${
+              `${PFX} incorrect dependency definition for ${
                 dependency.property
-              }"`
+              }`
             );
           }
           if (dependency.resolve) {
-            const resolverPath = beanDefenition.resolver;
+            const resolverPath = beanDefinition.resolver;
             const resolverBean: IResolver<T> = this.getBean(
               resolverPath,
               true,
@@ -387,9 +439,32 @@ export abstract class AbstractBeanFactory
           );
         } else {
           throw new Exception(
-            `autowire: Autowired property "${
-              dependency.property
-            }" should be null but got "${propertyValue}"`
+            `${PFX} autowired property should be null ${dependency.property}`
+          );
+        }
+      }
+    }
+  }
+
+  private resource<T>(bean: T, beanDefinition: TBeanDefinition<T>) {
+    if (!beanDefinition.factory) {
+      return;
+    }
+
+    if (Reflect.hasMetadata(resourceDependenciesToken, bean.constructor)) {
+      const resources: TResource[] = Reflect.getMetadata(
+        resourceDependenciesToken,
+        bean.constructor
+      ) as TResource[];
+      for (const resource of resources) {
+        // check property is empty
+        const propertyName = resource.property;
+        const propertyValue = bean[propertyName];
+        if (!propertyValue) {
+          bean[propertyName] = this.getResource(resource.url);
+        } else {
+          throw new Exception(
+            `${PFX} resource property should be null ${resource.property}`
           );
         }
       }
@@ -417,10 +492,10 @@ export abstract class AbstractBeanFactory
       if (this.beanPathMap && this.beansMap) {
         this.running = true;
       } else {
-        throw new Exception("Bean factory has not configured");
+        throw new Exception(`${PFX} bean factory has not configured`);
       }
     } else {
-      throw new Exception("Bean factory already has started");
+      throw new Exception(`${PFX} bean factory already started`);
     }
   }
 
@@ -438,11 +513,15 @@ export abstract class AbstractBeanFactory
       }
       this.running = false;
     } else {
-      throw new Exception("Bean factory has not started");
+      throw new Exception(`${PFX} bean factory has not started`);
     }
   }
 
   public isRunning(): boolean {
     return this.running;
+  }
+
+  public getResource(url: string) {
+    return AbstractBeanFactory.resources[url];
   }
 }

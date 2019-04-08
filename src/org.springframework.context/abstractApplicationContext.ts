@@ -6,13 +6,21 @@ import {
   ApplicationContextStartEvent,
   ApplicationContextStopEvent
 } from "./applicationContextEvent";
+import { resourceDependenciesToken, TResource, ResourceHolder } from "../javax";
 
 //
 // Context is a Ioc container with event system
 //
 
+const PFX = "[ABSTRACT APPLICATION CONTEXT]:";
+
 export class AbstractApplicationContext extends AbstractBeanFactory {
   protected parentBeanFactory: AbstractApplicationContext;
+
+  constructor() {
+    super();
+    this.parentBeanFactory = null;
+  }
 
   public publishEvent(event: ApplicationEvent) {
     if (this.beansMap) {
@@ -31,7 +39,7 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
       });
     } else {
       throw new Exception(
-        "AbstractApplicationContext could not publish event now"
+        `${PFX} could not publish event - context not started`
       );
     }
 
@@ -45,6 +53,10 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
   // ILifecycle implementation
   //
 
+  public async load() {
+    await AbstractApplicationContext.loadResources();
+  }
+
   public start() {
     super.start();
     this.publishEvent(new ApplicationContextStartEvent(this));
@@ -57,5 +69,23 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
 
   public close() {
     super.close();
+  }
+
+  //
+  // Implementation
+  //
+
+  public static async loadResources() {
+    const resources: TResource[] =
+      Reflect.getMetadata(resourceDependenciesToken, ResourceHolder) || [];
+
+    if (Object.keys(AbstractBeanFactory.resources).length === 0) {
+      for (let i = 0; i < resources.length; ++i) {
+        const resource = resources[i];
+        const response = await fetch(resource.url);
+        const data = await response.json();
+        AbstractBeanFactory.resources[resource.url] = data;
+      }
+    }
   }
 }

@@ -45,7 +45,7 @@ export function Bean(token: Symbol, params?: TBeanParams) {
       params.scope !== "global" &&
       params.scope !== "prototype")
   ) {
-    throw new Error("Incorrect bean definition params");
+    throw new Error("[@Bean]: incorrect bean definition params");
   }
 
   return function(constructor) {
@@ -53,23 +53,99 @@ export function Bean(token: Symbol, params?: TBeanParams) {
       token,
       factory: constructor,
       scope: params.scope,
+      resolver: params.resolver,
+      configuration: false
+    };
+
+    // register additional bean
+    const beanDefinitions =
+      Reflect.getMetadata(beansToken, AbstractBeanFactory) || [];
+    Reflect.defineMetadata(
+      beansToken,
+      [...beanDefinitions, beanDefinition],
+      AbstractBeanFactory
+    );
+  };
+}
+
+//
+// @Configuration
+//
+
+export function Configuration(token: Symbol, params?: TBeanParams) {
+  params = params || {};
+  params.scope = params.scope == null ? "singleton" : params.scope;
+
+  // checks params
+  if (
+    !token ||
+    (params.scope !== "singleton" &&
+      params.scope !== "global" &&
+      params.scope !== "prototype")
+  ) {
+    throw new Error("[@Configuration]: incorrect bean definition params");
+  }
+
+  return function(constructor) {
+    const beanDefinition: TBeanDefinition<any> = {
+      token,
+      factory: constructor,
+      scope: params.scope,
+      resolver: params.resolver,
+      configuration: true
+    };
+
+    // register additional bean
+    const beanDefinitions =
+      Reflect.getMetadata(beansToken, AbstractBeanFactory) || [];
+    Reflect.defineMetadata(
+      beansToken,
+      [...beanDefinitions, beanDefinition],
+      AbstractBeanFactory
+    );
+  };
+}
+
+//
+// @bean
+//
+
+export function bean(token: Symbol, params?: TBeanParams) {
+  params = params || {};
+  params.scope = params.scope == null ? "singleton" : params.scope;
+
+  // checks params
+  if (
+    !token ||
+    (params.scope !== "singleton" &&
+      params.scope !== "global" &&
+      params.scope !== "prototype")
+  ) {
+    throw new Error("[@bean]: incorrect bean definition params");
+  }
+
+  return function(
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    const destination = target.constructor;
+
+    const beanDefinition: TBeanDefinition<any> = {
+      token,
+      factory: null,
+      factoryProperty: propertyKey,
+      scope: params.scope,
       resolver: params.resolver
     };
-    if (!Reflect.hasMetadata(beansToken, AbstractBeanFactory)) {
-      // register first bean
-      Reflect.defineMetadata(beansToken, [beanDefinition], AbstractBeanFactory);
-    } else {
-      // register additional bean
-      const beanDefinitions = Reflect.getMetadata(
-        beansToken,
-        AbstractBeanFactory
-      );
-      Reflect.defineMetadata(
-        beansToken,
-        [beanDefinition, ...beanDefinitions],
-        AbstractBeanFactory
-      );
-    }
+
+    // register additional bean
+    const beanDefinitions = Reflect.getMetadata(beansToken, destination) || [];
+    Reflect.defineMetadata(
+      beansToken,
+      [...beanDefinitions, beanDefinition],
+      destination
+    );
   };
 }
 
@@ -80,20 +156,13 @@ export function Bean(token: Symbol, params?: TBeanParams) {
 export function EventListener(eventClass: typeof ApplicationEvent) {
   return function(target, key, descriptor) {
     const destination = target.constructor;
-    if (!Reflect.hasMetadata(eventsToken, destination)) {
-      Reflect.defineMetadata(
-        eventsToken,
-        [{ key, eventClass } as TEventListenerRecord],
-        destination
-      );
-    } else {
-      const eventListeners = Reflect.getMetadata(eventsToken, destination);
-      Reflect.defineMetadata(
-        eventsToken,
-        [{ key, eventClass } as TEventListenerRecord, ...eventListeners],
-        destination
-      );
-    }
+
+    const eventListeners = Reflect.getMetadata(eventsToken, destination) || [];
+    Reflect.defineMetadata(
+      eventsToken,
+      [...eventListeners, { key, eventClass } as TEventListenerRecord],
+      destination
+    );
   };
 }
 

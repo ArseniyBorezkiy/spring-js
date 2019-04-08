@@ -1,75 +1,3 @@
-# `js-beans`
-
-## JS/TS IoC in Java Spring style (+ small spring core features).
-
-- Spring Core (IoC) for typescript и javascript.
-- Defines Spring Context (IoC + events), Beans terms.
-- Support hierarchical contexts with hierarchical event system.
-- Support bean scopes (singleton, prototype, global).
-- Support beans mappings using tokens (Symbol) and strings (i.e. "bean1").
-- Support convinience beans testings using decorators and test context.
-- Has many tests and examples in tests folders.
-- Has production use in one bank for make complex engine based on PIXI/Konva.
-
-All beans are lazy loaded (by acquiring of @Autowire or beanFactory.getBean()).
-
-If you want to collaborate, write me at arseniiboretskii@gmail.com.
-I like Java and I like Spring.
-If you know Spring, you know js-beans.
-It is also helps Java developers to write frontend code.
-
-### Source code has similar classes like in Java:
-
-```
-src/java
-  ICloseable, Exception
-src/javax
-  @PostConstruct, @PreDestroy, @Transactional, ITransaction
-src/rxjava
-  @Disposable
-src/org.springframework.beans
-  @Autowired, AbstractBeanFactory, FactoryBean, IBeanFactory
-src/org.springframework.context
-  @Bean, @bean, @EventListener, AbstractApplicationContext
-  IApplicationContext, IApplicationContextAware, IResourceLoader
-src/org.springframework.context
-  ApplicationContextEvent, ApplicationContextStartEvent,
-  ApplicationContextStopEvent
-src/org.springframework.context
-  ApplicationContextBeanRuntimeExceptionEvent,
-  ApplicationContextProvider, ApplicationEvent, ILifecycle
-src/org.springframework.test
-  @Test
-src/org.springframework.transaction
-  AbstractTransaction, AbstractTransactionManager
-```
-
-### Additional (has different meanings rather than in Java):
-
-```
-src/javax (@Resource)
-src/org.springframework.context (@Throwable, @ThrowableAsync)
-src/org.springframework.context (JsonUrlApplicationContext)
-src/org.springframework.context (IApplicationContextLoader)
-src/org.springframework.test (@AsyncTest, @Spy, @SpyOnGet)
-```
-
-## Example (see src/test/packageDemo.ts and src/\_\_tests/demo.test.ts)
-
-- Dependencies: reflect-metadata (no other dependencies).
-- TS compile options: experimentalDecorators, emitDecoratorMetadata.
-
-```
-npm i
-npm run test
-```
-
-Here is an example below wich contains:
-
-- 2 contexts: ApplicationContext & ApplicationTestContext
-- @Configuration to replace existing bean
-
-```
 import {
   Bean,
   Autowired,
@@ -94,7 +22,7 @@ import {
   ThrowableAsync,
   Configuration,
   bean
-} from "js-beans";
+} from "..";
 
 //
 // Tokens
@@ -402,25 +330,3 @@ export class ChildContext extends AbstractApplicationContext {
 //
 // }
 //
-```
-
-### Receipts
-
-see src/**tests** to run receipt packages:
-
-- src/test/packagePlugins.ts - demonstrates how to use chaining of optional
-  plugable beans in case you want to modify your bean beahaviour using Proxy.
-- src/test/package1.ts & src/package2.ts - demonstrates how to use
-  two contexts and different scopes (prototype and so one).
-- src/test/packageDemo.ts - contains example from this readme.
-- src/test/packagePoc.ts - demonstrates how to use hierachical contexts.
-- src/test/packageFactoryBean.ts - demonstrates how to use beans resolvers.
-- src/test/packageTransactions.ts - demonstrates how to use transactions.
-- src/test/packageContext.ts - demonstrates basic IoC functionality.
-- src/test/packageContextLoader.ts - example how to load context from url.
-
-### Limitations
-
-- Currently injection available using @Autowire (setter) and @bean (method),
-  there is no constructor injections.
-- Currently there is no type cheking in runtime.

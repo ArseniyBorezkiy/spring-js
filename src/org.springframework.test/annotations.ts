@@ -14,12 +14,8 @@ export const spiesOnGetToken = Symbol();
 
 export function Test(target, key, descriptor) {
   const destination = target.constructor;
-  if (!Reflect.hasMetadata(testsToken, destination)) {
-    Reflect.defineMetadata(testsToken, [key], destination);
-  } else {
-    const keys = Reflect.getMetadata(testsToken, destination);
-    Reflect.defineMetadata(testsToken, [key, ...keys], destination);
-  }
+  const keys = Reflect.getMetadata(testsToken, destination) || [];
+  Reflect.defineMetadata(testsToken, [key, ...keys], destination);
 }
 
 //
@@ -28,12 +24,8 @@ export function Test(target, key, descriptor) {
 
 export function AsyncTest(target, key, descriptor) {
   const destination = target.constructor;
-  if (!Reflect.hasMetadata(asyncTestsToken, destination)) {
-    Reflect.defineMetadata(asyncTestsToken, [key], destination);
-  } else {
-    const keys = Reflect.getMetadata(asyncTestsToken, destination);
-    Reflect.defineMetadata(asyncTestsToken, [key, ...keys], destination);
-  }
+  const keys = Reflect.getMetadata(asyncTestsToken, destination) || [];
+  Reflect.defineMetadata(asyncTestsToken, [key, ...keys], destination);
 }
 
 //
@@ -42,12 +34,8 @@ export function AsyncTest(target, key, descriptor) {
 
 export function Spy(target, key, descriptor) {
   const destination = target.constructor;
-  if (!Reflect.hasMetadata(spiesToken, destination)) {
-    Reflect.defineMetadata(spiesToken, [key], destination);
-  } else {
-    const keys = Reflect.getMetadata(spiesToken, destination);
-    Reflect.defineMetadata(spiesToken, [key, ...keys], destination);
-  }
+  const keys = Reflect.getMetadata(spiesToken, destination) || [];
+  Reflect.defineMetadata(spiesToken, [key, ...keys], destination);
 }
 
 //
@@ -56,11 +44,6 @@ export function Spy(target, key, descriptor) {
 
 export function SpyOnGet(target, key, descriptor) {
   const destination = target.constructor;
-  if (!Reflect.hasMetadata(spiesOnGetToken, destination)) {
-    Reflect.defineMetadata(spiesOnGetToken, [key], destination);
-  } else {
-    const keys = Reflect.getMetadata(spiesOnGetToken, destination);
-    Reflect.defineMetadata(spiesOnGetToken, [key, ...keys], destination);
-  }
+  const keys = Reflect.getMetadata(spiesOnGetToken, destination) || [];
+  Reflect.defineMetadata(spiesOnGetToken, [key, ...keys], destination);
 }
-

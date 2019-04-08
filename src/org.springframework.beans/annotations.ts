@@ -21,8 +21,11 @@ export type TAutowire = {
 export type TBeanDefinition<T> = {
   token: Symbol;
   factory: new () => T;
+  factoryProperty?: string;
   scope: TScope;
   resolver: TWishedBean;
+  configuration?: boolean;
+  bean?: any;
 };
 
 export const dependenciesToken = Symbol();
@@ -36,41 +39,26 @@ export function Autowired(wishedBean: TWishedBean, params?: TAutowiredParams) {
   params.required = params.required == null ? false : params.required;
 
   if (wishedBean == null) {
-    throw new Exception("@Autowired: Wished bean should not be null");
+    throw new Exception("[@Autowired]: wished bean should not be null");
   }
 
   return function(target, propertyKey: string) {
     const destination = target.constructor;
-    if (!Reflect.hasMetadata(dependenciesToken, destination)) {
-      // register first dependency
-      Reflect.defineMetadata(
-        dependenciesToken,
-        [
-          {
-            property: propertyKey,
-            wishedBean,
-            required: params.required,
-            resolve: params.resolve
-          } as TAutowire
-        ],
-        destination
-      );
-    } else {
-      // register additional dependency
-      const dependencies = Reflect.getMetadata(dependenciesToken, destination);
-      Reflect.defineMetadata(
-        dependenciesToken,
-        [
-          {
-            property: propertyKey,
-            wishedBean,
-            required: params.required,
-            resolve: params.resolve
-          } as TAutowire,
-          ...dependencies
-        ],
-        destination
-      );
-    }
+    const dependencies =
+      Reflect.getMetadata(dependenciesToken, destination) || [];
+
+    Reflect.defineMetadata(
+      dependenciesToken,
+      [
+        ...dependencies,
+        {
+          property: propertyKey,
+          wishedBean,
+          required: params.required,
+          resolve: params.resolve
+        } as TAutowire
+      ],
+      destination
+    );
   };
 }
