@@ -1,4 +1,4 @@
-import { AbstractApplicationContext } from ".";
+import { AbstractApplicationContext } from "./abstractApplicationContext";
 import { TWishedBeanOrFactory } from "../org.springframework.beans";
 import {
   IApplicationContextLoader,
