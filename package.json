@@ -85,7 +85,9 @@
     ]
   },
   "keywords": [
-    "spring-core",
+    "IoC",
+    "Spring",
+    "Spring-core",
     "beans"
   ],
   "license": "ISC"

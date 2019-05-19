@@ -28,8 +28,8 @@ export class JsonContext extends JsonUrlApplicationContext {
     super.configureBeansDefinitions();
   }
 
-  start() {
-    super.startSchemaBeans();
+  async start() {
+    await super.startSchemaBeans();
   }
 }
 

@@ -35,7 +35,6 @@ export abstract class AbstractBeanFactory
   public beansMap: Map<any, any>;
   public beanPathMap: Map<any, any>;
   protected running = false;
-  protected static resources: any = {};
 
   protected abstract parentBeanFactory: AbstractBeanFactory;
 
@@ -46,6 +45,9 @@ export abstract class AbstractBeanFactory
     this.beansMap = new Map();
     this.beanPathMap = new Map();
   }
+
+  // load resource
+  public async abstract getResource(url: string): Promise<string>;
 
   // retrieve instantiated bean from cache
   public findSingletonInstance(key: any) {
@@ -89,7 +91,7 @@ export abstract class AbstractBeanFactory
     for (const whishedBean of wishedBeans) {
       this.beanPathMap.set(
         whishedBean,
-        FactoryBean.of(() => context.getBean(whishedBean))
+        FactoryBean.of(async () => await context.getBean(whishedBean))
       );
     }
   }
@@ -162,11 +164,11 @@ export abstract class AbstractBeanFactory
   }
 
   // instantiate bean or retrieve it from cache
-  public getBean<T>(
+  public async getBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required: boolean = true,
     extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null
-  ): T | null {
+  ): Promise<T | null> {
     extraBeanPathMap = extraBeanPathMap || emptyMap;
 
     if (wishedBean == null) {
@@ -178,7 +180,7 @@ export abstract class AbstractBeanFactory
       // 1.1. resolve string path to either another string path or symbol token
       const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
       // 1.2. try again until get symbol token
-      return this.getBean<T>(nextWishedBean, required, extraBeanPathMap);
+      return await this.getBean<T>(nextWishedBean, required, extraBeanPathMap);
     }
 
     // 2. get bean by symbol token
@@ -201,25 +203,25 @@ export abstract class AbstractBeanFactory
           );
           if (!newWishedBean) {
             // 2.2.1.1. instantiate by token because parents not awared about this token
-            return this.getBeanByToken<T>(
+            return await this.getBeanByToken<T>(
               wishedBean,
               required,
               extraBeanPathMap
             );
           } else {
             // 2.2.1.2. try get again with new path that was resolved in parents
-            return this.getBean<T>(newWishedBean, required, extraBeanPathMap);
+            return await this.getBean<T>(newWishedBean, required, extraBeanPathMap);
           }
         } else {
           // 2.2.2. instantiate by token because there is no parents
-          return this.getBeanByToken<T>(wishedBean, required, extraBeanPathMap);
+          return await this.getBeanByToken<T>(wishedBean, required, extraBeanPathMap);
         }
       }
 
       // 2.3. resolve in itself
       const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
       // 2.4. try get again with new path that was resolved by itself
-      return this.getBean<T>(nextWishedBean, required, extraBeanPathMap);
+      return await this.getBean<T>(nextWishedBean, required, extraBeanPathMap);
     }
 
     // 3. get bean by factory
@@ -268,11 +270,11 @@ export abstract class AbstractBeanFactory
     }
   }
 
-  private getBeanByToken<T>(
+  private async getBeanByToken<T>(
     token: Symbol,
     required: boolean,
     extraBeanPathMap: Map<any, TWishedBeanOrFactory>
-  ): T | null {
+  ): Promise<T | null> {
     // 1. check beans definitions exists in package
     if (!Reflect.hasMetadata(beansToken, AbstractBeanFactory)) {
       throw new Exception(`${PFX} no beans found in context`);
@@ -311,26 +313,26 @@ export abstract class AbstractBeanFactory
       bean = this.findSingletonInstance(beanDefinition.token);
       if (!bean) {
         // instantiate
-        bean = this.instantiateBean(beanDefinition);
+        bean = await this.instantiateBean(beanDefinition);
         this.beansMap.set(beanDefinition.token, bean);
-        this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
-        this.resource<T>(bean, beanDefinition);
+        await this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
+        await this.resource<T>(bean, beanDefinition);
       }
     } else if (beanDefinition.scope === "global") {
       bean = this.findGlobalInstance(beanDefinition.token);
       if (!bean) {
         // instantiate
-        bean = this.instantiateBean(beanDefinition);
+        bean = await this.instantiateBean(beanDefinition);
         AbstractBeanFactory.beansMap.set(beanDefinition.token, bean);
-        this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
-        this.resource<T>(bean, beanDefinition);
+        await this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
+        await this.resource<T>(bean, beanDefinition);
       }
     } else if (beanDefinition.scope === "prototype") {
       // instantiate
-      bean = this.instantiateBean(beanDefinition);
+      bean = await this.instantiateBean(beanDefinition);
       this.beansMap.set(Symbol(), bean);
-      this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
-      this.resource<T>(bean, beanDefinition);
+      await this.autowire<T>(bean, beanDefinition, extraBeanPathMap);
+      await this.resource<T>(bean, beanDefinition);
     } else {
       throw new Exception(`${PFX} usupported scope - ${beanDefinition.scope}`);
     }
@@ -374,7 +376,7 @@ export abstract class AbstractBeanFactory
     return bean;
   }
 
-  private instantiateBean<T>(beanDefinition: TBeanDefinition<T>): T {
+  private async instantiateBean<T>(beanDefinition: TBeanDefinition<T>): Promise<T> {
     if (beanDefinition.factory != null) {
       const type = beanDefinition.factory.prototype;
       return new type.constructor(this);
@@ -384,12 +386,13 @@ export abstract class AbstractBeanFactory
       throw new Exception(`${PFX} bean should not be null`);
     }
 
-    return beanDefinition.bean[beanDefinition.factoryProperty].call(
+    const bean = await beanDefinition.bean[beanDefinition.factoryProperty];
+    return bean.call(
       beanDefinition.bean
     );
   }
 
-  private autowire<T>(
+  private async autowire<T>(
     bean: T,
     beanDefinition: TBeanDefinition<T>,
     extraBeanPathMap: Map<any, TWishedBeanOrFactory>
@@ -417,7 +420,7 @@ export abstract class AbstractBeanFactory
           }
           if (dependency.resolve) {
             const resolverPath = beanDefinition.resolver;
-            const resolverBean: IResolver<T> = this.getBean(
+            const resolverBean: IResolver<T> = await this.getBean(
               resolverPath,
               true,
               extraBeanPathMap
@@ -432,7 +435,7 @@ export abstract class AbstractBeanFactory
               extraBeanPathMap = resolverMap;
             }
           }
-          bean[propertyName] = this.getBean(
+          bean[propertyName] = await this.getBean(
             dependency.wishedBean,
             dependency.required,
             extraBeanPathMap
@@ -446,7 +449,7 @@ export abstract class AbstractBeanFactory
     }
   }
 
-  private resource<T>(bean: T, beanDefinition: TBeanDefinition<T>) {
+  private async resource<T>(bean: T, beanDefinition: TBeanDefinition<T>) {
     if (!beanDefinition.factory) {
       return;
     }
@@ -461,7 +464,7 @@ export abstract class AbstractBeanFactory
         const propertyName = resource.property;
         const propertyValue = bean[propertyName];
         if (!propertyValue) {
-          bean[propertyName] = this.getResource(resource.url);
+          bean[propertyName] = await this.getResource(resource.url);
         } else {
           throw new Exception(
             `${PFX} resource property should be null ${resource.property}`
@@ -519,9 +522,5 @@ export abstract class AbstractBeanFactory
 
   public isRunning(): boolean {
     return this.running;
-  }
-
-  public getResource(url: string) {
-    return AbstractBeanFactory.resources[url];
   }
 }

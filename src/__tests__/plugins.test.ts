@@ -19,18 +19,18 @@ describe("Plugins", () => {
     applicationTestContext
   );
 
-  beforeAll(() => {
+  beforeAll(async () => {
     applicationTestContext.configure();
     applicationTestContext.set(
       ApplicationContextToken,
       FactoryBean.of(() => applicationTestContext)
     );
-    applicationTestContext.start();
-    initMocks(ConsumerToken, ConsumerTest, applicationTestContext);
+    await applicationTestContext.start();
+    await initMocks(ConsumerToken, ConsumerTest, applicationTestContext);
   });
 
-  afterAll(() => {
-    deinitMocks(ConsumerToken, ConsumerTest, applicationTestContext);
+  afterAll(async () => {
+    await deinitMocks(ConsumerToken, ConsumerTest, applicationTestContext);
     applicationTestContext.close();
   });
 

@@ -19,7 +19,6 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     const response = await fetch(this.url);
     const schema = await response.json();
     this.schema = schema;
-    await super.load();
   }
 
   public configureBeansDefinitions() {
@@ -39,7 +38,7 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     super.configure(new Map<any, TWishedBeanOrFactory>(beansDefinition));
   }
 
-  public startSchemaBeans() {
+  public async startSchemaBeans() {
     const beans = this.schema.beans;
     console.log(`${PFX} initial beans`);
     beans.forEach(bean => {

@@ -6,7 +6,6 @@ import {
   ApplicationContextStartEvent,
   ApplicationContextStopEvent
 } from "./applicationContextEvent";
-import { resourceDependenciesToken, TResource, ResourceHolder } from "../javax";
 
 //
 // Context is a Ioc container with event system
@@ -53,10 +52,6 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
   // ILifecycle implementation
   //
 
-  public async load() {
-    await AbstractApplicationContext.loadResources();
-  }
-
   public start() {
     super.start();
     this.publishEvent(new ApplicationContextStartEvent(this));
@@ -72,20 +67,12 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
   }
 
   //
-  // Implementation
+  // Overrides
   //
 
-  public static async loadResources() {
-    const resources: TResource[] =
-      Reflect.getMetadata(resourceDependenciesToken, ResourceHolder) || [];
-
-    if (Object.keys(AbstractBeanFactory.resources).length === 0) {
-      for (let i = 0; i < resources.length; ++i) {
-        const resource = resources[i];
-        const response = await fetch(resource.url);
-        const data = await response.json();
-        AbstractBeanFactory.resources[resource.url] = data;
-      }
-    }
+  public async getResource(url: string): Promise<string> {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
   }
 }

@@ -20,7 +20,7 @@ export interface IBeanFactory {
     wishedBean: TWishedBeanOrFactory | T,
     required?: boolean,
     extraBeanPathMap?: Map<any, TWishedBeanOrFactory>
-  ): T | null;
+  ): Promise<T | null>;
 
   set(key: Symbol, value: TWishedBeanOrFactory);
 }

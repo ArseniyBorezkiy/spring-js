@@ -19,18 +19,18 @@ describe("Demo", () => {
     applicationTestContext
   );
 
-  beforeAll(() => {
+  beforeAll(async () => {
     applicationTestContext.configure();
     applicationTestContext.set(
       ApplicationContextToken,
       FactoryBean.of(() => applicationTestContext)
     );
     applicationTestContext.start();
-    initMocks(Bean1Token, Bean1Test, applicationTestContext);
+    await initMocks(Bean1Token, Bean1Test, applicationTestContext);
   });
 
-  afterAll(() => {
-    deinitMocks(Bean1Token, Bean1Test, applicationTestContext);
+  afterAll(async () => {
+    await deinitMocks(Bean1Token, Bean1Test, applicationTestContext);
     applicationTestContext.close();
   });
 

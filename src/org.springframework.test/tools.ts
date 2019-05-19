@@ -16,8 +16,8 @@ export function registerAllTest(
     const keys = Reflect.getMetadata(testsToken, type);
     for (let i = 0; i < keys.length; ++i) {
       const name = keys[i];
-      it(name, () => {
-        const bean = context.getBean(token);
+      it(name, async () => {
+        const bean = await context.getBean(token);
         const f = bean[name];
         f.call(bean, context);
       });
@@ -29,7 +29,7 @@ export function registerAllTest(
     for (let i = 0; i < keys.length; ++i) {
       const name = keys[i];
       it(name, async () => {
-        const bean = context.getBean(token);
+        const bean = await context.getBean(token);
         const f = bean[name];
         await f.call(bean, context);
       });
@@ -37,12 +37,12 @@ export function registerAllTest(
   }
 }
 
-export function initMocks(
+export async function initMocks(
   token: Symbol,
   type: any,
   context: AbstractApplicationContext
 ) {
-  const obj: Object = context.getBean(token);
+  const obj: Object = await context.getBean(token);
   if (Reflect.hasMetadata(spiesToken, type)) {
     const keys = Reflect.getMetadata(spiesToken, type);
     for (let i = 0; i < keys.length; ++i) {
@@ -73,12 +73,12 @@ export function initMocks(
   }
 }
 
-export function deinitMocks(
+export async function deinitMocks(
   token: Symbol,
   type: any,
   context: AbstractApplicationContext
 ) {
-  const obj: Object = context.getBean(token);
+  const obj: Object = await context.getBean(token);
   if (Reflect.hasMetadata(spiesValuesToken, obj)) {
     const keys = Reflect.getMetadata(spiesValuesToken, obj);
     for (let i = 0; i < keys.length; ++i) {

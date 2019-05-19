@@ -60,16 +60,16 @@ describe("Transaction in context", () => {
     context.close();
   });
 
-  it("Transation without errors", () => {
-    const actor = context.getBean<SimpleActor>(SimpleActorToken);
+  it("Transation without errors", async () => {
+    const actor = await context.getBean<SimpleActor>(SimpleActorToken);
     actor.methodWithoudErrors();
     expect(actor.transactionManager.getStatus()).toBe(
       ETransactionStatus.commited
     );
   });
 
-  it("Transation with errors", () => {
-    const actor = context.getBean<SimpleActor>(SimpleActorToken);
+  it("Transation with errors", async () => {
+    const actor = await context.getBean<SimpleActor>(SimpleActorToken);
     try {
       actor.methodWithErrors();
     } catch (e) {
@@ -79,8 +79,8 @@ describe("Transaction in context", () => {
     }
   });
 
-  it("Deep calls without errors", () => {
-    const actor = context.getBean<SimpleActor>(SimpleActorToken);
+  it("Deep calls without errors", async () => {
+    const actor = await context.getBean<SimpleActor>(SimpleActorToken);
     expect(actor.methodDeepWithoutErrors()).toBe(1);
     const transaction1 = actor.transactionManager.getTransaction<
       SimpleTransaction

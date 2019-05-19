@@ -18,6 +18,7 @@ export type TResourceParams = {
 export const postConstructHooksToken = Symbol();
 export const preDestroyHooksToken = Symbol();
 export const transactionalToken = Symbol();
+export const resourceDefinitionToken = Symbol();
 export const resourceDependenciesToken = Symbol();
 
 export class ResourceHolder {}
@@ -106,7 +107,7 @@ export function Resource(url: string, params?: TResourceParams) {
     const dependencies =
       Reflect.getMetadata(resourceDependenciesToken, destination) || [];
     const resources =
-      Reflect.getMetadata(resourceDependenciesToken, ResourceHolder) || [];
+      Reflect.getMetadata(resourceDefinitionToken, destination) || [];
 
     Reflect.defineMetadata(
       resourceDependenciesToken,
@@ -122,14 +123,14 @@ export function Resource(url: string, params?: TResourceParams) {
     );
 
     Reflect.defineMetadata(
-      resourceDependenciesToken,
+      resourceDefinitionToken,
       [
         ...resources,
         {
           url
         } as TResource
       ],
-      ResourceHolder
+      destination
     );
   };
 }

@@ -20,9 +20,9 @@ describe("Context loader", () => {
     const data = JSON.stringify(applicationContextJsonFile);
     fetchMock.mockResponse(data);
     context = new JsonContext("http://applicationContext.json");
-    context.load().then(() => {
+    context.load().then(async () => {
       context.configure();
-      context.start();
+      await context.start();
 
       done();
     });
@@ -33,10 +33,10 @@ describe("Context loader", () => {
     fetchMock.resetMocks();
   });
 
-  it("Beans", () => {
+  it("Beans", async () => {
     expect(context.beanPathMap.size).toBe(4);
-    const bean1 = context.getBean<Bean_1>(Bean_1_Token);
-    const bean2 = context.getBean(Bean_2_Token, false);
+    const bean1 = await context.getBean<Bean_1>(Bean_1_Token);
+    const bean2 = await context.getBean(Bean_2_Token, false);
     expect(bean1).not.toBeNull();
     expect(bean1.schema).not.toBeNull();
     expect(JSON.stringify(bean1.schema)).toBe(

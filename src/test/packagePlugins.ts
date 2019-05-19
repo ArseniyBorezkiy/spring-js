@@ -117,7 +117,7 @@ export class ConfigurationPlugins implements IApplicationContextAware {
   @Autowired(ProviderToken) provider?: IProvider;
 
   @bean(ProviderToken)
-  public providerBean(): IProvider {
+  public async providerBean(): Promise<IProvider> {
     let provider = this.provider;
 
     const currentProviderBeanMap = new Map<any, TWishedBeanOrFactory>([
@@ -125,14 +125,14 @@ export class ConfigurationPlugins implements IApplicationContextAware {
     ]);
 
     // apply optional plugin 1
-    const plugin1 = this.context.getBean<IProvider>(
+    const plugin1 = await this.context.getBean<IProvider>(
       ProviderPluginToken1,
       false,
       currentProviderBeanMap
     );
     provider = plugin1 || provider;
     // apply optional plugin 2
-    const plugin2 = this.context.getBean<IProvider>(
+    const plugin2 = await this.context.getBean<IProvider>(
       ProviderPluginToken2,
       false,
       currentProviderBeanMap
@@ -157,15 +157,15 @@ export class ApplicationTestContext extends AbstractApplicationContext {
     );
   }
 
-  public start() {
+  public async start() {
     // bootstrap context
 
     // instantiate bean to be overrided
-    this.getBean<Consumer>(ProviderToken);
+    await this.getBean<Consumer>(ProviderToken);
     // instatiate configuration with beans to override provider
-    this.getBean(ConfigurationToken);
+    await this.getBean(ConfigurationToken);
     // instantiate consumer with overrided provider
-    this.getBean<Consumer>(ConsumerToken);
+    await this.getBean<Consumer>(ConsumerToken);
 
     super.start();
   }

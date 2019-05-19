@@ -32,11 +32,11 @@ describe("Proof of concept", () => {
     contextBusiness.close();
   });
 
-  it("Poc test", () => {
-    const business = contextBusiness.getBean<TestBean_Business>(
+  it("Poc test", async () => {
+    const business = await contextBusiness.getBean<TestBean_Business>(
       TestBean_Core_Token
     );
-    const drawable = contextDrawable.getBean<TestBean_Drawable>(
+    const drawable = await contextDrawable.getBean<TestBean_Drawable>(
       TestBean_Drawable_Token
     );
     expect(drawable.core).toBe(business);

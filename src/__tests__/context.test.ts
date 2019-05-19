@@ -21,8 +21,8 @@ describe("Context", () => {
     context.close();
   });
 
-  it("Events", () => {
-    const instance = context.getBean<TestBean_1>(TestBean_1_Token);
+  it("Events", async () => {
+    const instance = await context.getBean<TestBean_1>(TestBean_1_Token);
     expect(instance.eventTriggered).toBeFalsy();
     context.start();
     expect(instance.eventTriggered).toBeTruthy();
