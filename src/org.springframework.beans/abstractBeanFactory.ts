@@ -369,7 +369,10 @@ export abstract class AbstractBeanFactory
           postConstructHooksToken,
           bean.constructor
         );
-        bean[postConstructHook].call(bean);
+        const result = bean[postConstructHook].call(bean);
+        if (result instanceof Promise) {
+          await result;
+        }
       }
     }
 

@@ -166,11 +166,11 @@ export class ApplicationContext extends AbstractApplicationContext {
     );
   }
 
-  public start() {
+  public async start() {
     // bootstrap context
 
     // instantiate bean1 with it's dependencies
-    this.getBean<Bean1>(Bean1Token);
+    await this.getBean<Bean1>(Bean1Token);
 
     super.start();
   }
@@ -197,21 +197,21 @@ export class ApplicationTestContext extends AbstractApplicationContext {
     );
   }
 
-  public start() {
+  public async start() {
     // bootstrap context
 
     // instantiate value using FactoryBean
-    this.getBean(CustomConsolePrefixToken); // `[CONSOLE PREFIX]:`
+    await this.getBean(CustomConsolePrefixToken); // `[CONSOLE PREFIX]:`
 
     // instantiate configuration (no @beans created)
-    this.getBean(ConfigurationToken);
+    await this.getBean(ConfigurationToken);
 
     // instantiate value using @bean from @Configuration
     //   cause of configuration method consolePrefix() replaced the token
-    this.getBean(CustomConsolePrefixToken); // `[CUSTOM CONSOLE PREFIX]:`
+    await this.getBean(CustomConsolePrefixToken); // `[CUSTOM CONSOLE PREFIX]:`
 
     // instantiate bean with it's dependencies
-    this.getBean<Bean1>(Bean1Token);
+    await this.getBean<Bean1>(Bean1Token);
 
     super.start();
   }
@@ -302,11 +302,13 @@ export class ChildContext extends AbstractApplicationContext {
 //   /* remap existings tokens only for specific call */
 //   [AbstractValueToken, FactoryBean.of(() => 1)]
 // ])
-// const bean1 = ApplicationContextProvider.get().getApplicationContext()
+// const bean1 = await ApplicationContextProvider.get().getApplicationContext()
 //   .getBean(Bean1Token, isRequired, extraMapOnlyForOneCall)
 
 //
 // !!! React files.ts
+// This pattern only supported in v1 and v2 (before migrate to asynchronous)
+// In new ^v3 version you should write your own simple decorator with async loading to await getBean
 //
 // const applicationContext = ApplicationContextProvider.get()
 //   .getApplicationContext();
