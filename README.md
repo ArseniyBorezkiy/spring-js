@@ -430,4 +430,4 @@ see src/**tests** to run receipt packages:
 version 1 - synchronous context and bean instantiation, all resources (@resource) loaded at context initialization (bad practice)
 version 2 - added rollup.js (now all dist code packed to single files index.js and index.d.ts)
 version 3 - asynchronous context and beans instantiation with resources loading (@resource) at bean instantiating time (good practice)
-vesrion 3.1 - added asynchronous to @PostConstruct method
+vesrion 3.1.1 - added asynchronous to @PostConstruct method
