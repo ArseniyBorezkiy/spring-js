@@ -163,6 +163,130 @@ export abstract class AbstractBeanFactory
     this.beansMap.delete(key);
   }
 
+  // retrieve bean from cache
+  public getCachedBean<T>(wishedBean: TWishedBeanOrFactory | T, required: boolean = true, extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null): T | null {
+    extraBeanPathMap = extraBeanPathMap || emptyMap;
+
+    if (wishedBean == null) {
+      throw new Exception(`${PFX} wished bean should not be null`);
+    }
+
+    // 1. resolve string path
+    if (typeof wishedBean === "string") {
+      // 1.1. resolve string path to either another string path or symbol token
+      const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
+      // 1.2. try again until get symbol token
+      return this.getCachedBean<T>(nextWishedBean, required, extraBeanPathMap);
+    }
+
+    // 2. get bean by symbol token
+    if (typeof wishedBean === "symbol") {
+      // 2.1 search in instances
+      if (this.beansMap.has(wishedBean)) {
+        return this.beansMap.get(wishedBean);
+      }
+
+      // 2.2. resolve symbol token to another token
+      if (
+        !this.beanPathMap.has(wishedBean) &&
+        !extraBeanPathMap.has(wishedBean)
+      ) {
+        if (this.parentBeanFactory) {
+          // 2.2.1. resolve in parents
+          const newWishedBean = this.resolveBean<T>(
+            wishedBean,
+            extraBeanPathMap
+          );
+          if (!newWishedBean) {
+            // 2.2.1.1. instantiate by token because parents not awared about this token
+            return this.getCachedBeanByToken<T>(
+              wishedBean,
+              required
+            );
+          } else {
+            // 2.2.1.2. try get again with new path that was resolved in parents
+            return this.getCachedBean<T>(newWishedBean, required, extraBeanPathMap);
+          }
+        } else {
+          // 2.2.2. instantiate by token because there is no parents
+          return this.getCachedBeanByToken<T>(wishedBean, required);
+        }
+      }
+
+      // 2.3. resolve in itself
+      const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
+      // 2.4. try get again with new path that was resolved by itself
+      return this.getCachedBean<T>(nextWishedBean, required, extraBeanPathMap);
+    }
+
+    // 3. get bean by factory
+    if (wishedBean instanceof FactoryBean) {
+      const beanFactory = wishedBean as FactoryBean<T>;
+      return beanFactory.factory();
+    }
+
+    // 4. bean is resolved from instances
+    return wishedBean as any;
+  }
+
+  private getCachedBeanByToken<T>(
+    token: Symbol,
+    required: boolean
+  ): T | null {
+    // 1. check beans definitions exists in package
+    if (!Reflect.hasMetadata(beansToken, AbstractBeanFactory)) {
+      throw new Exception(`${PFX} no beans found in context`);
+    }
+
+    // 2. find bean definition by type
+    const beanDefinitions: TBeanDefinition<T>[] = Reflect.getMetadata(
+      beansToken,
+      AbstractBeanFactory
+    );
+    const beanDefinition: TBeanDefinition<T> = beanDefinitions.find(
+      (beanDefinition: TBeanDefinition<T>) => beanDefinition.token === token
+    ) as TBeanDefinition<T>;
+
+    if (!beanDefinition) {
+      if (required) {
+        console.log(
+          `${PFX} bean with such token not provided in context`,
+          token
+        );
+        throw new Exception(
+          `${PFX} bean with such token not provided in context`
+        );
+      }
+
+      return null;
+    }
+
+    if (beanDefinition.factory == null && beanDefinition.bean == null) {
+      throw new Exception(`${PFX} incorrect bean definition`);
+    }
+
+    // 3. get instance
+    let bean: T;
+    if (beanDefinition.scope === "singleton") {
+      bean = this.findSingletonInstance(beanDefinition.token);
+      if (!bean) {
+        throw new Exception(`${PFX} retrieving from cache bean not instantiated yet`);
+      }
+    } else if (beanDefinition.scope === "global") {
+      bean = this.findGlobalInstance(beanDefinition.token);
+      if (!bean) {
+        throw new Exception(`${PFX} retrieving from cache bean not instantiated yet`);
+      }
+    } else if (beanDefinition.scope === "prototype") {
+      // instantiate
+      throw new Exception(`${PFX} retrieving bean should not have prototype scope`);
+    } else {
+      throw new Exception(`${PFX} usupported scope - ${beanDefinition.scope}`);
+    }
+
+    return bean;
+  }
+
   // instantiate bean or retrieve it from cache
   public async getBean<T>(
     wishedBean: TWishedBeanOrFactory | T,

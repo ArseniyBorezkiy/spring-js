@@ -16,6 +16,12 @@ export type TWishedBeanOrFactory = TWishedBean | FactoryBean<any>;
 //
 
 export interface IBeanFactory {
+  getCachedBean<T>(
+    wishedBean: TWishedBeanOrFactory | T,
+    required?: boolean,
+    extraBeanPathMap?: Map<any, TWishedBeanOrFactory>
+  ): T | null;
+
   getBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required?: boolean,
