@@ -29,8 +29,8 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     console.log(`${PFX} beans definition`);
     beansDefinition.forEach(beanDefinition => {
       console.log(
-        `${PFX} + mapped ${beanDefinition.abstraction} to ${
-          beanDefinition.support
+        `${PFX} + mapped ${beanDefinition[0]} to ${
+          beanDefinition[1]
         }`
       );
     });
@@ -42,7 +42,7 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     const beans = this.schema.beans;
     console.log(`${PFX} initial beans`);
     beans.forEach(bean => {
-      console.log(`${PFX} + bean ${bean}`);
+      console.log(`${PFX} + bean=${bean.id} required=${!bean.optional}`);
       this.getBean(bean.id, !bean.optional);
     });
   }

@@ -48,7 +48,7 @@ src/org.springframework.transaction
 
 ```
 src/javax (@Resource)
-src/org.springframework.context (@Throwable, @ThrowableAsync)
+src/org.springframework.context (@Throwable, @ThrowableAsync, IThrowable)
 src/org.springframework.context (JsonUrlApplicationContext)
 src/org.springframework.context (IApplicationContextLoader)
 src/org.springframework.test (@AsyncTest, @Spy, @SpyOnGet)

@@ -6,6 +6,7 @@ import { AbstractBeanFactory } from "../org.springframework.beans/abstractBeanFa
 import { ApplicationEvent } from "./applicationEvent";
 import { AbstractApplicationContext } from "./abstractApplicationContext";
 import { ApplicationContextBeanRuntimeExceptionEvent } from "./applicationContextEvent";
+import { IApplicationContextAware } from "./applicationContext";
 
 //
 // Types
@@ -23,6 +24,12 @@ export type TEventListenerRecord = {
 
 export const beansToken = Symbol();
 export const eventsToken = Symbol();
+
+//
+// Interfaces
+//
+
+export interface IThrowable extends IApplicationContextAware {}
 
 //
 // Scope
