@@ -1,6 +1,6 @@
 {
   "name": "js-beans",
-  "version": "3.1.4",
+  "version": "3.2.0",
   "description": "IoC in Spring style",
   "author": "Arsenii_Boretskii <arseniiboretskii@gmail.com>",
   "module": "dist/index.js",
