@@ -1,6 +1,8 @@
 import { Exception } from "../java";
 
-export interface ITransactionParams {}
+export interface ITransactionParams {
+  target?: ITransactional;
+}
 
 export enum ETransactionStatus {
   closed = 0,
@@ -17,7 +19,7 @@ export interface ITransaction {
 }
 
 export interface ITransactionManager {
-  begin();
+  begin(params: ITransactionParams);
   commit();
   rollback();
   suspend();

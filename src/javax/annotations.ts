@@ -62,7 +62,13 @@ export function Transactional(params?: ITransactionParams) {
       let result = null;
 
       try {
-        transactionManager.begin(params);
+        const transactionParams = { target: this };
+
+        if (params) {
+          Object.assign(transactionParams, params);
+        }
+        
+        transactionManager.begin(transactionParams);
         result = originalMethod.apply(this, arguments);
         if (result instanceof Promise) {
           const promise = result;

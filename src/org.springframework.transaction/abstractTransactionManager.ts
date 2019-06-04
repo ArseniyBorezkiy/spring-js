@@ -2,7 +2,8 @@ import {
   ITransactionManager,
   ETransactionStatus,
   ITransaction,
-  TransactionRequiredException
+  TransactionRequiredException,
+  ITransactionParams
 } from "../javax/transaction";
 
 export abstract class AbstractTransactionManager
@@ -20,7 +21,7 @@ export abstract class AbstractTransactionManager
   // Api
   //
 
-  public begin() {
+  public begin(params: ITransactionParams) {
     this.semaphore += 1;
   }
 
