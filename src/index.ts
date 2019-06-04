@@ -6,3 +6,4 @@ export * from "./rxjava";
 export * from "./org.springframework.beans";
 export * from "./org.springframework.context";
 export * from "./org.springframework.test";
+export * from "./org.springframework.transaction";
