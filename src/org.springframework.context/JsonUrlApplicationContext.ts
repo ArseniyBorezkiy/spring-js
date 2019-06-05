@@ -21,29 +21,41 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     this.schema = schema;
   }
 
-  public configureBeansDefinitions() {
+  public configureBeansDefinitions(debug: boolean) {
     const beansDefinition: any = this.schema.beansDefinition.map(
       beanDefinition => [beanDefinition.abstraction, beanDefinition.support]
     );
 
-    console.log(`${PFX} beans definition`);
+    if (debug) {
+      console.log(`${PFX} beans definition`);
+    }
+    
     beansDefinition.forEach(beanDefinition => {
-      console.log(
-        `${PFX} + mapped ${beanDefinition[0]} to ${
-          beanDefinition[1]
-        }`
-      );
+      if (debug) {
+        console.log(
+          `${PFX} + mapped ${beanDefinition[0]} to ${
+            beanDefinition[1]
+          }`
+        );
+      }
     });
 
     super.configure(new Map<any, TWishedBeanOrFactory>(beansDefinition));
   }
 
-  public async startSchemaBeans() {
+  public async startSchemaBeans(debug: boolean) {
     const beans = this.schema.beans;
-    console.log(`${PFX} initial beans`);
-    beans.forEach(bean => {
-      console.log(`${PFX} + bean=${bean.id} required=${!bean.optional}`);
-      this.getBean(bean.id, !bean.optional);
-    });
+
+    if (debug) {
+      console.log(`${PFX} initial beans`);
+    }
+
+    for (let bean of beans) {
+      if (debug) {
+        console.log(`${PFX} + bean=${bean.id} required=${!bean.optional}`);
+      }
+
+      await this.getBean(bean.id, !bean.optional);
+    }
   }
 }
