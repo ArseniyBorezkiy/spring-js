@@ -73,6 +73,7 @@
 					<li>Support bean scopes (singleton, prototype, global).</li>
 					<li>Support beans mappings using tokens (Symbol) and strings (i.e. &quot;bean1&quot;).</li>
 					<li>Support convinience beans testings using decorators and test context.</li>
+					<li>Support json context based configuration files (like ClassPathXmlApplicationContext in java).</li>
 					<li>Has many tests and examples in tests folders.</li>
 					<li>Has production use in one bank for make complex engine based on PIXI/Konva.</li>
 				</ul>
@@ -109,7 +110,23 @@ src/org<span class="hljs-selector-class">.springframework</span><span class="hlj
 <span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span> (<span class="hljs-variable">@Throwable</span>, <span class="hljs-variable">@ThrowableAsync</span>, IThrowable)
 <span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span> (JsonUrlApplicationContext)
 <span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span> (IApplicationContextLoader)
-<span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.test</span> (<span class="hljs-variable">@AsyncTest</span>, <span class="hljs-variable">@Spy</span>, <span class="hljs-variable">@SpyOnGet</span>)</code></pre><h2 id="example-see-src-test-packagedemo-ts-and-src-__tests-demo-test-ts-">Example (see src/test/packageDemo.ts and src/__tests/demo.test.ts)</h2>
+<span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.test</span> (<span class="hljs-variable">@AsyncTest</span>, <span class="hljs-variable">@Spy</span>, <span class="hljs-variable">@SpyOnGet</span>)</code></pre><h2 id="example-of-context-configuration-file">Example of context configuration file</h2>
+				<pre><code>{
+  <span class="hljs-string">"beansDefinition"</span>: [
+    {
+      <span class="hljs-string">"abstraction"</span>: <span class="hljs-string">"com.yourproject.logger"</span>,
+      <span class="hljs-string">"support"</span>: <span class="hljs-string">"com.yourproject.logger.support.consoleLogger"</span>
+    }
+  ],
+  <span class="hljs-string">"beans"</span>: [
+    { <span class="hljs-string">"id"</span>: <span class="hljs-string">"com.yourproject.logger"</span>, <span class="hljs-string">"optional"</span>:<span class="hljs-built_in"> false</span> }
+  ]
+}
+
+// Where:
+// beansDefinition - beans names mapping.
+// beans - beans <span class="hljs-keyword">to</span> instantiate <span class="hljs-keyword">at</span> <span class="hljs-keyword">context</span> <span class="hljs-keyword">start</span>.
+// See JsonApplicationContext api reference <span class="hljs-keyword">of</span> tests suite <span class="hljs-keyword">for</span> more details.</code></pre><h2 id="example-see-src-test-packagedemo-ts-and-src-__tests-demo-test-ts-">Example (see src/test/packageDemo.ts and src/__tests/demo.test.ts)</h2>
 				<ul>
 					<li>Dependencies: reflect-metadata (no other dependencies).</li>
 					<li>TS compile options: experimentalDecorators, emitDecoratorMetadata.</li>
