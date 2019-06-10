@@ -452,16 +452,16 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 <span class="hljs-comment">//</span></code></pre><h3 id="receipts">Receipts</h3>
 				<p>see src/<strong>tests</strong> to run receipt packages:</p>
 				<ul>
-					<li>src/test/packagePlugins.ts - demonstrates how to use chaining of optional
+					<li>src/tests/packagePlugins.ts - demonstrates how to use chaining of optional
 					plugable beans in case you want to modify your bean beahaviour using Proxy.</li>
-					<li>src/test/package1.ts &amp; src/package2.ts - demonstrates how to use
+					<li>src/tests/package1.ts &amp; src/package2.ts - demonstrates how to use
 					two contexts and different scopes (prototype and so one).</li>
-					<li>src/test/packageDemo.ts - contains example from this readme.</li>
-					<li>src/test/packagePoc.ts - demonstrates how to use hierachical contexts.</li>
-					<li>src/test/packageFactoryBean.ts - demonstrates how to use beans resolvers.</li>
-					<li>src/test/packageTransactions.ts - demonstrates how to use transactions.</li>
-					<li>src/test/packageContext.ts - demonstrates basic IoC functionality.</li>
-					<li>src/test/packageContextLoader.ts - example how to load context from url.</li>
+					<li>src/tests/packageDemo.ts - contains example from this readme.</li>
+					<li>src/tests/packagePoc.ts - demonstrates how to use hierachical contexts.</li>
+					<li>src/tests/packageFactoryBean.ts - demonstrates how to use beans resolvers.</li>
+					<li>src/tests/packageTransactions.ts - demonstrates how to use transactions.</li>
+					<li>src/tests/packageContext.ts - demonstrates basic IoC functionality.</li>
+					<li>src/tests/packageContextLoader.ts - example how to load context from url.</li>
 				</ul>
 				<h3 id="limitations">Limitations</h3>
 				<ul>
@@ -469,11 +469,6 @@ export <span class="hljs-class"><span class="hljs-keyword">class</span> <span cl
 					there is no constructor injections.</li>
 					<li>Currently there is no type cheking in runtime.</li>
 				</ul>
-				<h3 id="changelist">Changelist</h3>
-				<p>version 1 - synchronous context and bean instantiation, all resources (@resource) loaded at context initialization (bad practice)
-					version 2 - added rollup.js (now all dist code packed to single files index.js and index.d.ts)
-					version 3 - asynchronous context and beans instantiation with resources loading (@resource) at bean instantiating time (good practice)
-				vesrion 3.1.1 - added asynchronous to @PostConstruct method</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
