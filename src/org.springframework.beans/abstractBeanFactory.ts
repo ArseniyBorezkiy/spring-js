@@ -47,7 +47,7 @@ export abstract class AbstractBeanFactory
   }
 
   // load resource
-  public async abstract getResource(url: string): Promise<string>;
+  public abstract async getResource(url: string): Promise<string>;
 
   // retrieve instantiated bean from cache
   public findSingletonInstance(key: any) {
@@ -91,7 +91,7 @@ export abstract class AbstractBeanFactory
     for (const whishedBean of wishedBeans) {
       this.beanPathMap.set(
         whishedBean,
-        FactoryBean.of(async () => await context.getBean(whishedBean))
+        FactoryBean.of(async () => await context.doGetBean(whishedBean))
       );
     }
   }
@@ -164,7 +164,25 @@ export abstract class AbstractBeanFactory
   }
 
   // retrieve bean from cache
-  public getCachedBean<T>(wishedBean: TWishedBeanOrFactory | T, required: boolean = true, extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null): T | null {
+  public getCachedBean<T>(
+    wishedBean: TWishedBeanOrFactory | T,
+    required: boolean = true,
+    extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null,
+    debug = false
+  ): T | null {
+    if (debug) {
+      console.log(wishedBean);
+    }
+
+    return this.doGetCachedBean(wishedBean, required, extraBeanPathMap);
+  }
+
+  // retrieve bean from cache
+  private doGetCachedBean<T>(
+    wishedBean: TWishedBeanOrFactory | T,
+    required: boolean = true,
+    extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null
+  ): T | null {
     extraBeanPathMap = extraBeanPathMap || emptyMap;
 
     if (wishedBean == null) {
@@ -176,7 +194,11 @@ export abstract class AbstractBeanFactory
       // 1.1. resolve string path to either another string path or symbol token
       const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
       // 1.2. try again until get symbol token
-      return this.getCachedBean<T>(nextWishedBean, required, extraBeanPathMap);
+      return this.doGetCachedBean<T>(
+        nextWishedBean,
+        required,
+        extraBeanPathMap
+      );
     }
 
     // 2. get bean by symbol token
@@ -199,13 +221,14 @@ export abstract class AbstractBeanFactory
           );
           if (!newWishedBean) {
             // 2.2.1.1. instantiate by token because parents not awared about this token
-            return this.getCachedBeanByToken<T>(
-              wishedBean,
-              required
-            );
+            return this.getCachedBeanByToken<T>(wishedBean, required);
           } else {
             // 2.2.1.2. try get again with new path that was resolved in parents
-            return this.getCachedBean<T>(newWishedBean, required, extraBeanPathMap);
+            return this.doGetCachedBean<T>(
+              newWishedBean,
+              required,
+              extraBeanPathMap
+            );
           }
         } else {
           // 2.2.2. instantiate by token because there is no parents
@@ -216,7 +239,11 @@ export abstract class AbstractBeanFactory
       // 2.3. resolve in itself
       const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
       // 2.4. try get again with new path that was resolved by itself
-      return this.getCachedBean<T>(nextWishedBean, required, extraBeanPathMap);
+      return this.doGetCachedBean<T>(
+        nextWishedBean,
+        required,
+        extraBeanPathMap
+      );
     }
 
     // 3. get bean by factory
@@ -229,10 +256,7 @@ export abstract class AbstractBeanFactory
     return wishedBean as any;
   }
 
-  private getCachedBeanByToken<T>(
-    token: Symbol,
-    required: boolean
-  ): T | null {
+  private getCachedBeanByToken<T>(token: Symbol, required: boolean): T | null {
     // 1. check beans definitions exists in package
     if (!Reflect.hasMetadata(beansToken, AbstractBeanFactory)) {
       throw new Exception(`${PFX} no beans found in context`);
@@ -270,16 +294,22 @@ export abstract class AbstractBeanFactory
     if (beanDefinition.scope === "singleton") {
       bean = this.findSingletonInstance(beanDefinition.token);
       if (!bean) {
-        throw new Exception(`${PFX} retrieving from cache bean not instantiated yet`);
+        throw new Exception(
+          `${PFX} retrieving from cache bean not instantiated yet`
+        );
       }
     } else if (beanDefinition.scope === "global") {
       bean = this.findGlobalInstance(beanDefinition.token);
       if (!bean) {
-        throw new Exception(`${PFX} retrieving from cache bean not instantiated yet`);
+        throw new Exception(
+          `${PFX} retrieving from cache bean not instantiated yet`
+        );
       }
     } else if (beanDefinition.scope === "prototype") {
       // instantiate
-      throw new Exception(`${PFX} retrieving bean should not have prototype scope`);
+      throw new Exception(
+        `${PFX} retrieving bean should not have prototype scope`
+      );
     } else {
       throw new Exception(`${PFX} usupported scope - ${beanDefinition.scope}`);
     }
@@ -289,6 +319,20 @@ export abstract class AbstractBeanFactory
 
   // instantiate bean or retrieve it from cache
   public async getBean<T>(
+    wishedBean: TWishedBeanOrFactory | T,
+    required: boolean = true,
+    extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null,
+    debug = false
+  ): Promise<T | null> {
+    if (debug) {
+      console.log(`${PFX}`, wishedBean);
+    }
+
+    return this.doGetBean(wishedBean, required, extraBeanPathMap);
+  }
+
+  // instantiate bean or retrieve it from cache
+  private async doGetBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required: boolean = true,
     extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null
@@ -304,7 +348,11 @@ export abstract class AbstractBeanFactory
       // 1.1. resolve string path to either another string path or symbol token
       const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
       // 1.2. try again until get symbol token
-      return await this.getBean<T>(nextWishedBean, required, extraBeanPathMap);
+      return await this.doGetBean<T>(
+        nextWishedBean,
+        required,
+        extraBeanPathMap
+      );
     }
 
     // 2. get bean by symbol token
@@ -334,18 +382,30 @@ export abstract class AbstractBeanFactory
             );
           } else {
             // 2.2.1.2. try get again with new path that was resolved in parents
-            return await this.getBean<T>(newWishedBean, required, extraBeanPathMap);
+            return await this.doGetBean<T>(
+              newWishedBean,
+              required,
+              extraBeanPathMap
+            );
           }
         } else {
           // 2.2.2. instantiate by token because there is no parents
-          return await this.getBeanByToken<T>(wishedBean, required, extraBeanPathMap);
+          return await this.getBeanByToken<T>(
+            wishedBean,
+            required,
+            extraBeanPathMap
+          );
         }
       }
 
       // 2.3. resolve in itself
       const nextWishedBean = this.resolveBean<T>(wishedBean, extraBeanPathMap);
       // 2.4. try get again with new path that was resolved by itself
-      return await this.getBean<T>(nextWishedBean, required, extraBeanPathMap);
+      return await this.doGetBean<T>(
+        nextWishedBean,
+        required,
+        extraBeanPathMap
+      );
     }
 
     // 3. get bean by factory
@@ -503,7 +563,9 @@ export abstract class AbstractBeanFactory
     return bean;
   }
 
-  private async instantiateBean<T>(beanDefinition: TBeanDefinition<T>): Promise<T> {
+  private async instantiateBean<T>(
+    beanDefinition: TBeanDefinition<T>
+  ): Promise<T> {
     if (beanDefinition.factory != null) {
       const type = beanDefinition.factory.prototype;
       return new type.constructor(this);
@@ -514,9 +576,7 @@ export abstract class AbstractBeanFactory
     }
 
     const bean = await beanDefinition.bean[beanDefinition.factoryProperty];
-    return bean.call(
-      beanDefinition.bean
-    );
+    return bean.call(beanDefinition.bean);
   }
 
   private async autowire<T>(
@@ -547,7 +607,7 @@ export abstract class AbstractBeanFactory
           }
           if (dependency.resolve) {
             const resolverPath = beanDefinition.resolver;
-            const resolverBean: IResolver<T> = await this.getBean(
+            const resolverBean: IResolver<T> = await this.doGetBean(
               resolverPath,
               true,
               extraBeanPathMap
@@ -562,7 +622,7 @@ export abstract class AbstractBeanFactory
               extraBeanPathMap = resolverMap;
             }
           }
-          bean[propertyName] = await this.getBean(
+          bean[propertyName] = await this.doGetBean(
             dependency.wishedBean,
             dependency.required,
             extraBeanPathMap

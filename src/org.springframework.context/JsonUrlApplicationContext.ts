@@ -29,13 +29,11 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     if (debug) {
       console.log(`${PFX} beans definition`);
     }
-    
+
     beansDefinition.forEach(beanDefinition => {
       if (debug) {
         console.log(
-          `${PFX} + mapped ${beanDefinition[0]} to ${
-            beanDefinition[1]
-          }`
+          `${PFX} + mapped ${beanDefinition[0]} to ${beanDefinition[1]}`
         );
       }
     });
@@ -55,7 +53,7 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
         console.log(`${PFX} + bean=${bean.id} required=${!bean.optional}`);
       }
 
-      await this.getBean(bean.id, !bean.optional);
+      await this.getBean(bean.id, !bean.optional, null, debug);
     }
   }
 }

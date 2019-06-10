@@ -19,13 +19,15 @@ export interface IBeanFactory {
   getCachedBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required?: boolean,
-    extraBeanPathMap?: Map<any, TWishedBeanOrFactory>
+    extraBeanPathMap?: Map<any, TWishedBeanOrFactory>,
+    debug?: boolean
   ): T | null;
 
   getBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required?: boolean,
-    extraBeanPathMap?: Map<any, TWishedBeanOrFactory>
+    extraBeanPathMap?: Map<any, TWishedBeanOrFactory>,
+    debug?: boolean
   ): Promise<T | null>;
 
   set(key: Symbol, value: TWishedBeanOrFactory);
