@@ -30,6 +30,10 @@ const emptyMap = new Map<any, TWishedBeanOrFactory>();
 
 const PFX = "[ABSTRACT BEAN FACTORY]:";
 
+/**
+ * Abstract base class for IBeanFactory implementations.
+ * @remark https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/support/AbstractBeanFactory.html
+ */
 export abstract class AbstractBeanFactory
   implements IBeanFactory, ILifecycle, ICloseable, IResourceLoader {
   public beansMap: Map<any, any>;
@@ -46,10 +50,15 @@ export abstract class AbstractBeanFactory
     this.beanPathMap = new Map();
   }
 
-  // load resource
+  /**
+   * Get resource from server.
+   * @param url - json resource url.
+   */
   public abstract async getResource(url: string): Promise<string>;
 
-  // retrieve instantiated bean from cache
+  /**
+   * Retrieve instantiated bean from cache.
+   */
   public findSingletonInstance(key: any) {
     if (this.beansMap.has(key)) {
       return this.beansMap.get(key);
@@ -62,7 +71,9 @@ export abstract class AbstractBeanFactory
     return null;
   }
 
-  // retrieve instantiated bean from cache
+  /**
+   * Retrieve instantiated bean from cache.
+   */
   private findGlobalInstance(key: any) {
     if (AbstractBeanFactory.beansMap.has(key)) {
       return AbstractBeanFactory.beansMap.get(key);
@@ -71,22 +82,38 @@ export abstract class AbstractBeanFactory
     return null;
   }
 
+  /**
+   * Set bean token mapping.
+   * @param key - bean token.
+   * @param value - target to which bean token will be mapped (bean name or token).
+   */
   public set(key: Symbol, value: TWishedBeanOrFactory) {
     this.beanPathMap.set(key, value);
   }
 
+  /**
+   * Unset bean token mapping.
+   * @param key - bean token to unset.
+   */
   public unset(key: Symbol) {
     this.beanPathMap.delete(key);
   }
 
-  // set bean map
+  /**
+   * Set bean token mapping in batch way.
+   * @param beanPathMap - map with beans mapping.
+   */
   public configure(beanPathMap: Map<any, TWishedBeanOrFactory>) {
     for (const key of beanPathMap.keys()) {
       this.beanPathMap.set(key, beanPathMap.get(key));
     }
   }
 
-  // proxy wished beans to specified context
+  /**
+   * Proxy beans to specified context.
+   * @param context - context to inherit.
+   * @param wishedBeans - beans to proxy to inherited context.
+   */
   public inherit(context: AbstractBeanFactory, wishedBeans: TWishedBean[]) {
     for (const whishedBean of wishedBeans) {
       this.beanPathMap.set(
@@ -96,12 +123,18 @@ export abstract class AbstractBeanFactory
     }
   }
 
-  // proxy all not found beans to specified context
+  /**
+   * Proxy all not found beans to specified context.
+   * @param context - context to search not found beans.
+   */
   public setParent(context: AbstractBeanFactory) {
     this.parentBeanFactory = context;
   }
 
-  // execute all disposers in bean
+  /**
+   * Execute all disposers in bean.
+   * @param instance - bean.
+   */
   public disposeBean(instance) {
     let key;
     let value;
@@ -132,7 +165,10 @@ export abstract class AbstractBeanFactory
     }
   }
 
-  // destroy specified bean
+  /**
+   * Destroy specified bean.
+   * @param instance - bean.
+   */
   public destroyBean(instance) {
     let key;
     let value;
@@ -163,7 +199,13 @@ export abstract class AbstractBeanFactory
     this.beansMap.delete(key);
   }
 
-  // retrieve bean from cache
+  /**
+   * Retrieve bean from cache. Similar to getBean but in sync way.
+   * @param wishedBean - bean name or token.
+   * @param required - if not found and not required function returns null.
+   * @param extraBeanPathMap - extension of context bean mapping.
+   * @param debug - show bean resolution to console.
+   */
   public getCachedBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required: boolean = true,
@@ -307,7 +349,13 @@ export abstract class AbstractBeanFactory
     return bean;
   }
 
-  // instantiate bean or retrieve it from cache
+  /**
+   * Retrieve bean from cache.
+   * @param wishedBean - bean name or token.
+   * @param required - if not found and not required function returns null.
+   * @param extraBeanPathMap - extension of context bean mapping.
+   * @param debug - show bean resolution to console.
+   */
   public async getBean<T>(
     wishedBean: TWishedBeanOrFactory | T,
     required: boolean = true,
@@ -404,6 +452,11 @@ export abstract class AbstractBeanFactory
     return wishedBean as any;
   }
 
+  /**
+   * Resolve bean name or token.
+   * @param wishedBean - bean name or token.
+   * @param extraBeanPathMap - extension of context bean mapping.
+   */
   public resolveBean<T>(
     wishedBean: TWishedBean,
     extraBeanPathMap: Map<any, TWishedBeanOrFactory> = null
@@ -655,6 +708,9 @@ export abstract class AbstractBeanFactory
   // ICloseable implementation
   //
 
+  /**
+   * Destroy all beans in context and erase beans names mapping.
+   */
   public close() {
     if (this.isRunning()) {
       this.stop();
@@ -667,6 +723,9 @@ export abstract class AbstractBeanFactory
   // ILifecycle implementation
   //
 
+  /**
+   * Start context
+   */
   public start() {
     if (!this.isRunning()) {
       if (this.beanPathMap && this.beansMap) {
@@ -679,6 +738,9 @@ export abstract class AbstractBeanFactory
     }
   }
 
+  /**
+   * Destroy all beans in context but keep bean names mapping.
+   */
   public stop() {
     if (this.isRunning()) {
       const disposeBeansKeys = this.beansMap.keys();
@@ -697,6 +759,9 @@ export abstract class AbstractBeanFactory
     }
   }
 
+  /**
+   * Wheather context running and beans ready to retrieving.
+   */
   public isRunning(): boolean {
     return this.running;
   }

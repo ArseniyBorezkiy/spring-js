@@ -6,6 +6,11 @@ import {
   ITransactionParams
 } from "../javax/transaction";
 
+/**
+ * Base class for all transaction managers.
+ * Base implmentation of TransactionManager interface.
+ * Implements semaphore way to manage keep single transaction via transactional-annotated functions deep calls.
+ */
 export abstract class AbstractTransactionManager
   implements ITransactionManager {
   protected transaction: ITransaction;
@@ -21,10 +26,16 @@ export abstract class AbstractTransactionManager
   // Api
   //
 
+  /**
+   * start transaction
+   */
   public begin(params: ITransactionParams) {
     this.semaphore += 1;
   }
 
+  /**
+   * commit transaction
+   */
   public commit() {
     this.semaphore -= 1;
 
@@ -37,6 +48,9 @@ export abstract class AbstractTransactionManager
     }
   }
 
+  /**
+   * rollback transaction
+   */
   public rollback() {
     this.semaphore -= 1;
 
@@ -49,20 +63,32 @@ export abstract class AbstractTransactionManager
     }
   }
 
+  /**
+   * suspend transaction
+   */
   public suspend() {
     this.suspended = true;
   }
 
+  /**
+   * resume transaction
+   */
   public resume() {
     this.suspended = false;
   }
 
+  /**
+   * get status of transaction
+   */
   public getStatus(): ETransactionStatus {
     return this.transaction
       ? this.transaction.getStatus()
       : ETransactionStatus.closed;
   }
 
+  /**
+   * get transaction object
+   */
   public getTransaction<T extends ITransaction>(): T {
     return this.transaction as T;
   }

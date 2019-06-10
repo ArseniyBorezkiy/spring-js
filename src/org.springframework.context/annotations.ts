@@ -12,11 +12,17 @@ import { IApplicationContextAware } from "./applicationContext";
 // Types
 //
 
+/**
+ * Params for Bean annotation
+ */
 export type TBeanParams = {
   scope?: TScope;
   resolver?: TWishedBean;
 };
 
+/**
+ * Definition of the event listener for EventListener annotation
+ */
 export type TEventListenerRecord = {
   key: string;
   eventClass: typeof ApplicationEvent;
@@ -29,6 +35,9 @@ export const eventsToken = Symbol();
 // Interfaces
 //
 
+/**
+ * Annotation for classes contains Throwable annotated methods
+ */
 export interface IThrowable extends IApplicationContextAware {}
 
 //
@@ -41,6 +50,12 @@ export type TScope = "singleton" | "global" | "prototype";
 // @Bean
 //
 
+/**
+ * Mark class be managed by context.
+ * @remark https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html
+ * @param token - bean token to comply bean instance.
+ * @param params - bean params (scope).
+ */
 export function Bean(token: Symbol, params?: TBeanParams) {
   params = params || {};
   params.scope = params.scope == null ? "singleton" : params.scope;
@@ -79,6 +94,13 @@ export function Bean(token: Symbol, params?: TBeanParams) {
 // @Configuration
 //
 
+/**
+ * Mark class as configuration bean.
+ * Allows to use bean annotation for methods.
+ * @remark https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html
+ * @param token
+ * @param params
+ */
 export function Configuration(token: Symbol, params?: TBeanParams) {
   params = params || {};
   params.scope = params.scope == null ? "singleton" : params.scope;
@@ -117,6 +139,12 @@ export function Configuration(token: Symbol, params?: TBeanParams) {
 // @bean
 //
 
+/**
+ * Mark method as factory to provide bean.
+ * @remark https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Bean.html
+ * @param token - token to comply bean instance.
+ * @param params - bean params (scope).
+ */
 export function bean(token: Symbol, params?: TBeanParams) {
   params = params || {};
   params.scope = params.scope == null ? "singleton" : params.scope;
@@ -160,6 +188,11 @@ export function bean(token: Symbol, params?: TBeanParams) {
 // @EventListener
 //
 
+/**
+ * Subscribe for events in context.
+ * @remark https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/event/EventListener.html
+ * @param eventClass - event type to subscribe
+ */
 export function EventListener(eventClass: typeof ApplicationEvent) {
   return function(target, key, descriptor) {
     const destination = target.constructor;
@@ -177,6 +210,11 @@ export function EventListener(eventClass: typeof ApplicationEvent) {
 // @Throwable
 //
 
+/**
+ * All errors in method will be broadcasted to context as ApplicationContextBeanRuntimeExceptionEvent.
+ * For sync function.
+ * @param context - context to broadcast exceptions
+ */
 export function Throwable(context: AbstractApplicationContext = null) {
   return function(target, key, descriptor) {
     const originalMethod = descriptor.value;
@@ -205,6 +243,11 @@ export function Throwable(context: AbstractApplicationContext = null) {
 // @ThrowableAsync
 //
 
+/**
+ * All errors in method will be broadcasted to context as ApplicationContextBeanRuntimeExceptionEvent.
+ * For async function.
+ * @param context - context to broadcast exceptions
+ */
 export function ThrowableAsync(context: AbstractApplicationContext = null) {
   return function(target, key, descriptor) {
     const originalMethod = descriptor.value;

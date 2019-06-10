@@ -113,9 +113,14 @@
 					<div class="tsd-signature tsd-kind-icon">TBean<wbr>Params<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L15">org.springframework.context/annotations.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L18">org.springframework.context/annotations.ts:18</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Params for Bean annotation</p>
+						</div>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -134,9 +139,14 @@
 					<div class="tsd-signature tsd-kind-icon">TEvent<wbr>Listener<wbr>Record<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L20">org.springframework.context/annotations.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L26">org.springframework.context/annotations.ts:26</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Definition of the event listener for EventListener annotation</p>
+						</div>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
@@ -155,7 +165,7 @@
 					<div class="tsd-signature tsd-kind-icon">TScope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"singleton"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"global"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"prototype"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L38">org.springframework.context/annotations.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L47">org.springframework.context/annotations.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -168,7 +178,7 @@
 					<div class="tsd-signature tsd-kind-icon">beans<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unique symbol</span><span class="tsd-signature-symbol"> =&nbsp;Symbol()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L25">org.springframework.context/annotations.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L31">org.springframework.context/annotations.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -178,7 +188,7 @@
 					<div class="tsd-signature tsd-kind-icon">events<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unique symbol</span><span class="tsd-signature-symbol"> =&nbsp;Symbol()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L26">org.springframework.context/annotations.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L32">org.springframework.context/annotations.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,16 +205,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L44">org.springframework.context/annotations.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L59">org.springframework.context/annotations.ts:59</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Mark class be managed by context.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remark</dt>
+									<dd><p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html">https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html</a></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>token: <span class="tsd-signature-type">Symbol</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>bean token to comply bean instance.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="_org_springframework_context_annotations_.html#tbeanparams" class="tsd-signature-type">TBeanParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>bean params (scope).</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
@@ -221,9 +247,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L82">org.springframework.context/annotations.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L104">org.springframework.context/annotations.ts:104</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Mark class as configuration bean.
+									Allows to use bean annotation for methods.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remark</dt>
+									<dd><p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html">https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html</a></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -231,6 +268,8 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="_org_springframework_context_annotations_.html#tbeanparams" class="tsd-signature-type">TBeanParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
@@ -247,13 +286,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L163">org.springframework.context/annotations.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L196">org.springframework.context/annotations.ts:196</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Subscribe for events in context.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remark</dt>
+									<dd><p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/event/EventListener.html">https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/event/EventListener.html</a></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>eventClass: <a href="../classes/_org_springframework_context_applicationevent_.applicationevent.html" class="tsd-signature-type">ApplicationEvent</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>event type to subscribe</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
@@ -270,13 +322,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L180">org.springframework.context/annotations.ts:180</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L218">org.springframework.context/annotations.ts:218</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All errors in method will be broadcasted to context as ApplicationContextBeanRuntimeExceptionEvent.
+									For sync function.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> context: <a href="../classes/_org_springframework_context_abstractapplicationcontext_.abstractapplicationcontext.html" class="tsd-signature-type">AbstractApplicationContext</a><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>context to broadcast exceptions</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
@@ -293,13 +354,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L208">org.springframework.context/annotations.ts:208</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L251">org.springframework.context/annotations.ts:251</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>All errors in method will be broadcasted to context as ApplicationContextBeanRuntimeExceptionEvent.
+									For async function.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> context: <a href="../classes/_org_springframework_context_abstractapplicationcontext_.abstractapplicationcontext.html" class="tsd-signature-type">AbstractApplicationContext</a><span class="tsd-signature-symbol"> =&nbsp;null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>context to broadcast exceptions</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>
@@ -316,16 +386,32 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.context/annotations.ts#L120">org.springframework.context/annotations.ts:120</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.context/annotations.ts#L148">org.springframework.context/annotations.ts:148</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Mark method as factory to provide bean.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>remark</dt>
+									<dd><p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Bean.html">https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Bean.html</a></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>token: <span class="tsd-signature-type">Symbol</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>token to comply bean instance.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="_org_springframework_context_annotations_.html#tbeanparams" class="tsd-signature-type">TBeanParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>bean params (scope).</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">(Anonymous function)</span></h4>

@@ -13,6 +13,10 @@ import {
 
 const PFX = "[ABSTRACT APPLICATION CONTEXT]:";
 
+/**
+ * Abstract implementation of the ApplicationContext interface.
+ * @remark https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/support/AbstractApplicationContext.html
+ */
 export class AbstractApplicationContext extends AbstractBeanFactory {
   protected parentBeanFactory: AbstractApplicationContext;
 
@@ -21,6 +25,10 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
     this.parentBeanFactory = null;
   }
 
+  /**
+   * Broadcast event to all subscribed beans in context.
+   * @param event - application event to broadcast.
+   */
   public publishEvent(event: ApplicationEvent) {
     if (this.beansMap) {
       this.beansMap.forEach(bean => {
@@ -52,16 +60,25 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
   // ILifecycle implementation
   //
 
+  /**
+   * Start context.
+   */
   public start() {
     super.start();
     this.publishEvent(new ApplicationContextStartEvent(this));
   }
 
+  /**
+   * Destroy all beans in context but keep names mappings.
+   */
   public stop() {
     this.publishEvent(new ApplicationContextStopEvent(this));
     super.stop();
   }
 
+  /**
+   * Destroy all beans in context and delete beans mappings.
+   */
   public close() {
     super.close();
   }
@@ -70,6 +87,10 @@ export class AbstractApplicationContext extends AbstractBeanFactory {
   // Overrides
   //
 
+  /**
+   * Get resource from server.
+   * @param url - json resource url
+   */
   public async getResource(url: string): Promise<string> {
     const response = await fetch(url);
     const data = await response.json();

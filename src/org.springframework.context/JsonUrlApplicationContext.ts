@@ -7,6 +7,10 @@ import {
 
 const PFX = "[JSON APPLICATION CONTEXT]:";
 
+/**
+ * Application context loaded from remote json configuration file (like xml in spring)
+ * @remark https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/support/ClassPathXmlApplicationContext.html
+ */
 export class JsonUrlApplicationContext extends AbstractApplicationContext
   implements IApplicationContextLoader {
   private schema: IApplicationContextLoaderSchema;
@@ -15,12 +19,19 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     super();
   }
 
+  /**
+   * Load context from url.
+   */
   public async load(): Promise<void> {
     const response = await fetch(this.url);
     const schema = await response.json();
     this.schema = schema;
   }
 
+  /**
+   * Load beans configuration from context file.
+   * @param debug - show beans definition to console
+   */
   public configureBeansDefinitions(debug: boolean) {
     const beansDefinition: any = this.schema.beansDefinition.map(
       beanDefinition => [beanDefinition.abstraction, beanDefinition.support]
@@ -41,6 +52,10 @@ export class JsonUrlApplicationContext extends AbstractApplicationContext
     super.configure(new Map<any, TWishedBeanOrFactory>(beansDefinition));
   }
 
+  /**
+   * Instantiate beans specified in context file.
+   * @param debug - show beans instantiated to console
+   */
   public async startSchemaBeans(debug: boolean) {
     const beans = this.schema.beans;
 

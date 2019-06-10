@@ -69,6 +69,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Base class for all transaction managers.
+							Base implmentation of TransactionManager interface.
+						Implements semaphore way to manage keep single transaction via transactional-annotated functions deep calls.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -128,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L13">org.springframework.transaction/abstractTransactionManager.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L18">org.springframework.transaction/abstractTransactionManager.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_org_springframework_transaction_abstracttransactionmanager_.abstracttransactionmanager.html" class="tsd-signature-type">AbstractTransactionManager</a></h4>
@@ -144,7 +153,7 @@
 					<div class="tsd-signature tsd-kind-icon">semaphore<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L13">org.springframework.transaction/abstractTransactionManager.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L18">org.springframework.transaction/abstractTransactionManager.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -154,7 +163,7 @@
 					<div class="tsd-signature tsd-kind-icon">suspended<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L12">org.springframework.transaction/abstractTransactionManager.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L17">org.springframework.transaction/abstractTransactionManager.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -164,7 +173,7 @@
 					<div class="tsd-signature tsd-kind-icon">transaction<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_javax_transaction_.itransaction.html" class="tsd-signature-type">ITransaction</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L11">org.springframework.transaction/abstractTransactionManager.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L16">org.springframework.transaction/abstractTransactionManager.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -182,9 +191,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#begin">begin</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L24">org.springframework.transaction/abstractTransactionManager.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L32">org.springframework.transaction/abstractTransactionManager.ts:32</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>start transaction</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -206,9 +220,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#commit">commit</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L28">org.springframework.transaction/abstractTransactionManager.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L39">org.springframework.transaction/abstractTransactionManager.ts:39</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>commit transaction</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -224,9 +243,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#getstatus">getStatus</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L60">org.springframework.transaction/abstractTransactionManager.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L83">org.springframework.transaction/abstractTransactionManager.ts:83</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>get status of transaction</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../enums/_javax_transaction_.etransactionstatus.html" class="tsd-signature-type">ETransactionStatus</a></h4>
 						</li>
 					</ul>
@@ -242,9 +266,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#gettransaction">getTransaction</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L66">org.springframework.transaction/abstractTransactionManager.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L92">org.springframework.transaction/abstractTransactionManager.ts:92</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>get transaction object</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -266,9 +295,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#resume">resume</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L56">org.springframework.transaction/abstractTransactionManager.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L76">org.springframework.transaction/abstractTransactionManager.ts:76</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>resume transaction</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -284,9 +318,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#rollback">rollback</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L40">org.springframework.transaction/abstractTransactionManager.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L54">org.springframework.transaction/abstractTransactionManager.ts:54</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>rollback transaction</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -302,9 +341,14 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_javax_transaction_.itransactionmanager.html">ITransactionManager</a>.<a href="../interfaces/_javax_transaction_.itransactionmanager.html#suspend">suspend</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/7ad8b4a/src/org.springframework.transaction/abstractTransactionManager.ts#L52">org.springframework.transaction/abstractTransactionManager.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/ArseniyBorezkiy/js-beans/blob/03bf37f/src/org.springframework.transaction/abstractTransactionManager.ts#L69">org.springframework.transaction/abstractTransactionManager.ts:69</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>suspend transaction</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>

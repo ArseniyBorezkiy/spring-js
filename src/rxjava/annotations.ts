@@ -9,6 +9,10 @@ export type TDisposer = () => void;
 // @Disposable
 //
 
+/**
+ * Represents a disposable resource.
+ * @remark http://reactivex.io/RxJava/javadoc/io/reactivex/disposables/Disposable.html
+ */
 export function Disposable(target, propertyKey: string) {
   const destination = target.constructor;
   if (!Reflect.hasMetadata(disposableToken, destination)) {

@@ -12,6 +12,10 @@ export const spiesOnGetToken = Symbol();
 // @Test
 //
 
+/**
+ * Mark bean method as test.
+ * @remark https://junit.org/junit4/javadoc/4.12/org/junit/Test.html
+ */
 export function Test(target, key, descriptor) {
   const destination = target.constructor;
   const keys = Reflect.getMetadata(testsToken, destination) || [];
@@ -22,6 +26,10 @@ export function Test(target, key, descriptor) {
 // @AsyncTest
 //
 
+/**
+ * Mark bean method as async test.
+ * @remark https://junit.org/junit4/javadoc/4.12/org/junit/Test.html
+ */
 export function AsyncTest(target, key, descriptor) {
   const destination = target.constructor;
   const keys = Reflect.getMetadata(asyncTestsToken, destination) || [];
@@ -32,6 +40,9 @@ export function AsyncTest(target, key, descriptor) {
 // @Spy
 //
 
+/**
+ * Spy for bean method.
+ */
 export function Spy(target, key, descriptor) {
   const destination = target.constructor;
   const keys = Reflect.getMetadata(spiesToken, destination) || [];
@@ -42,6 +53,9 @@ export function Spy(target, key, descriptor) {
 // @SpyOnGet
 //
 
+/**
+ * Spy for bean getter.
+ */
 export function SpyOnGet(target, key, descriptor) {
   const destination = target.constructor;
   const keys = Reflect.getMetadata(spiesOnGetToken, destination) || [];

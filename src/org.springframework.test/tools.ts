@@ -7,6 +7,12 @@ import {
   spiesOnGetToken
 } from "./annotations";
 
+/**
+ * Register all test in bean.
+ * @param token - bean token.
+ * @param type - bean class.
+ * @param context - context from retrieve bean.
+ */
 export function registerAllTest(
   token: Symbol,
   type: any,
@@ -37,6 +43,12 @@ export function registerAllTest(
   }
 }
 
+/**
+ * Init annotated mocks in bean.
+ * @param token - bean token.
+ * @param type - bean class.
+ * @param context - context from retrieve bean.
+ */
 export async function initMocks(
   token: Symbol,
   type: any,
@@ -73,6 +85,12 @@ export async function initMocks(
   }
 }
 
+/**
+ * Deinit mocks in bean.
+ * @param token - bean token.
+ * @param type - bean class.
+ * @param context - context from retrieve bean.
+ */
 export async function deinitMocks(
   token: Symbol,
   type: any,

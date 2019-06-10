@@ -5,12 +5,24 @@ import { TScope } from "../org.springframework.context/annotations";
 // Types
 //
 
+/**
+ * Bean name or token to comply with.
+ * Abstract token can be mapped to bean associated token or bean name.
+ * Bean name can be mapped to bean name or bean associated token.
+ */
 export type TWishedBean = string | Symbol;
+
+/**
+ * Params for Autowired annotation
+ */
 export type TAutowiredParams = {
   required?: boolean;
   resolve?: TWishedBean;
 };
 
+/**
+ * Definition of autowired-marked field
+ */
 export type TAutowire = {
   property: string;
   wishedBean: any;
@@ -18,6 +30,9 @@ export type TAutowire = {
   resolve?: TWishedBean;
 };
 
+/**
+ * Definition of bean
+ */
 export type TBeanDefinition<T> = {
   token: Symbol;
   factory: new () => T;
@@ -34,6 +49,13 @@ export const dependenciesToken = Symbol();
 // @Autowired
 //
 
+/**
+ * Inject field (instantiating if needed dependencies).
+ * Allowing scopes (prototype, singleton, global).
+ * @remark https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html
+ * @param wishedBean - bean name or token.
+ * @param params - params (required, scope, etc).
+ */
 export function Autowired(wishedBean: TWishedBean, params?: TAutowiredParams) {
   params = params || {};
   params.required = params.required == null ? false : params.required;
