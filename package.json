@@ -1,6 +1,6 @@
 {
   "name": "spring-framework",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Spring.io core port for javascript",
   "author": "Arsenii_Boretskii <arseniiboretskii@gmail.com>",
   "module": "dist/index.js",
