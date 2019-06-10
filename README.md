@@ -120,7 +120,7 @@ import {
   ThrowableAsync,
   Configuration,
   bean
-} from "js-beans";
+} from "spring-framework";
 
 //
 // Tokens
