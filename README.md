@@ -408,26 +408,19 @@ export class ChildContext extends AbstractApplicationContext {
 
 see src/**tests** to run receipt packages:
 
-- src/test/packagePlugins.ts - demonstrates how to use chaining of optional
+- src/tests/packagePlugins.ts - demonstrates how to use chaining of optional
   plugable beans in case you want to modify your bean beahaviour using Proxy.
-- src/test/package1.ts & src/package2.ts - demonstrates how to use
+- src/tests/package1.ts & src/package2.ts - demonstrates how to use
   two contexts and different scopes (prototype and so one).
-- src/test/packageDemo.ts - contains example from this readme.
-- src/test/packagePoc.ts - demonstrates how to use hierachical contexts.
-- src/test/packageFactoryBean.ts - demonstrates how to use beans resolvers.
-- src/test/packageTransactions.ts - demonstrates how to use transactions.
-- src/test/packageContext.ts - demonstrates basic IoC functionality.
-- src/test/packageContextLoader.ts - example how to load context from url.
+- src/tests/packageDemo.ts - contains example from this readme.
+- src/tests/packagePoc.ts - demonstrates how to use hierachical contexts.
+- src/tests/packageFactoryBean.ts - demonstrates how to use beans resolvers.
+- src/tests/packageTransactions.ts - demonstrates how to use transactions.
+- src/tests/packageContext.ts - demonstrates basic IoC functionality.
+- src/tests/packageContextLoader.ts - example how to load context from url.
 
 ### Limitations
 
 - Currently injection available using @Autowire (setter) and @bean (method),
   there is no constructor injections.
 - Currently there is no type cheking in runtime.
-
-### Changelist
-
-version 1 - synchronous context and bean instantiation, all resources (@resource) loaded at context initialization (bad practice)
-version 2 - added rollup.js (now all dist code packed to single files index.js and index.d.ts)
-version 3 - asynchronous context and beans instantiation with resources loading (@resource) at bean instantiating time (good practice)
-vesrion 3.1.1 - added asynchronous to @PostConstruct method
