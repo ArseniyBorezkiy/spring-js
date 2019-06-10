@@ -7,7 +7,7 @@ import {
   TestBean_Drawable,
   TestBean_Core_Token,
   TestBean_Business
-} from "../test/packagePoc";
+} from "../tests/packagePoc";
 
 //
 // Tests

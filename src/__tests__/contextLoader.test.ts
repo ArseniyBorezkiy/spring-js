@@ -6,7 +6,7 @@ import {
   Bean_2_Token,
   applicationContextJsonFile,
   Bean_1
-} from "../test/packageContextLoader";
+} from "../tests/packageContextLoader";
 
 //
 // Tests

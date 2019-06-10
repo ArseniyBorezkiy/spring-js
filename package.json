@@ -1,7 +1,7 @@
 {
-  "name": "js-beans",
-  "version": "3.3.2",
-  "description": "IoC in Spring style",
+  "name": "spring-js",
+  "version": "1.0.0",
+  "description": "Spring.io core port for javascript",
   "author": "Arsenii_Boretskii <arseniiboretskii@gmail.com>",
   "module": "dist/index.js",
   "main": "dist/index.js",
@@ -21,6 +21,7 @@
     "assemble": "rimraf dist && tsc && babel dist -d dist",
     "build": "rollup -c rollup.lib.config.js",
     "test": "jest --no-cache",
+    "doc": "typedoc --out ./docs --exclude **/*tests*/* ./src",
     "test:clear": "jest --clearCache"
   },
   "peerDependencies": {
@@ -47,6 +48,7 @@
     "rollup-plugin-typescript2": "^0.20.1",
     "ts-jest": "23.10.5",
     "tslib": "^1.9.3",
+    "typedoc": "^0.14.2",
     "typescript": "3.2.2"
   },
   "resolutions": {

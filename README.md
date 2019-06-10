@@ -1,4 +1,4 @@
-# `js-beans`
+# `spring-js`
 
 ## JS/TS IoC in Java Spring style (+ small spring core features).
 

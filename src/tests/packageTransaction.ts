@@ -39,7 +39,7 @@ export class SimpleTransaction extends AbstractTransaction {
 export class SimpleTransactionManager extends AbstractTransactionManager {
   public begin() {
     this.transaction = new SimpleTransaction();
-    super.begin();
+    super.begin(null);
   }
 }
 

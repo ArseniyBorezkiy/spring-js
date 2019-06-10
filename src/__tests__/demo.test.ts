@@ -5,7 +5,7 @@ import {
   Bean1Token,
   Bean1Test,
   ApplicationContextToken
-} from "../test/packageDemo";
+} from "../tests/packageDemo";
 import { registerAllTest, initMocks, deinitMocks, FactoryBean } from "..";
 import { ApplicationContextProvider } from "../org.springframework.context";
 

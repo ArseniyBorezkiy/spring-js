@@ -14,7 +14,7 @@ import {
   TestBean1_3_Token,
   TestBean1_4_Token,
   package1
-} from "../test/package1";
+} from "../tests/package1";
 import {
   TestContext2_1,
   TestContext2_2,
@@ -29,7 +29,7 @@ import {
   TestBean2_4_Token,
   TestBean2_4,
   TestBean2_Value_Token
-} from "../test/package2";
+} from "../tests/package2";
 
 //
 // Tests
@@ -65,19 +65,19 @@ describe("Core", () => {
   });
 
   it("Single package test", async () => {
-    expect((await context1_1.getBean<TestBean1_1>(TestBean1_1_Token)).getName()).toBe(
-      "Bean 1_1"
-    );
-    expect((await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).getName()).toBe(
-      "Bean 1_2"
-    );
-    expect((await context1_1.getBean<TestBean1_2>(TestBean1_3_Token)).getName()).toBe(
-      "Bean 1_3"
-    );
+    expect(
+      (await context1_1.getBean<TestBean1_1>(TestBean1_1_Token)).getName()
+    ).toBe("Bean 1_1");
+    expect(
+      (await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).getName()
+    ).toBe("Bean 1_2");
+    expect(
+      (await context1_1.getBean<TestBean1_2>(TestBean1_3_Token)).getName()
+    ).toBe("Bean 1_3");
     expect(
       (await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).bean1.getName()
     ).toBe("Bean 1_1");
-    expect((await context1_1.getBean<TestBean1_3>(`${package1}.1_3`))).toBe(
+    expect(await context1_1.getBean<TestBean1_3>(`${package1}.1_3`)).toBe(
       await context1_1.getBean<TestBean1_3>(TestBean1_3_Token)
     );
     expect(
@@ -86,154 +86,164 @@ describe("Core", () => {
     expect(
       (await context1_1.getBean<TestBean1_3>(`${package1}.1_3`)).bean2.getName()
     ).toBe("Bean 1_2");
-    expect((await context1_1.getBean<TestBean1_3>(`${package1}.1_3`))).toBe(
+    expect(await context1_1.getBean<TestBean1_3>(`${package1}.1_3`)).toBe(
       await context1_1.getBean<TestBean1_3>(`${package1}.1_3-proxy`)
     );
     // reference identities
-    expect((await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).bean1).toBe(
-      (await context1_1.getBean<TestBean1_3>(`${package1}.1_3`)).bean1
-    );
-    expect((await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).bean1).toBe(
-      (await context1_1.getBean<TestBean1_1>(TestBean1_1_Token))
-    );
+    expect(
+      (await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).bean1
+    ).toBe((await context1_1.getBean<TestBean1_3>(`${package1}.1_3`)).bean1);
+    expect(
+      (await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)).bean1
+    ).toBe(await context1_1.getBean<TestBean1_1>(TestBean1_1_Token));
   });
 
   it("Multiple packages test", async () => {
-    expect((await context1_1.getBean<TestBean2_1>(TestBean2_1_Token)).getName()).toBe(
-      "Bean 2_1"
-    );
-    expect((context1_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)).getName()).toBe(
-      "Bean 2_1"
-    );
+    expect(
+      (await context1_1.getBean<TestBean2_1>(TestBean2_1_Token)).getName()
+    ).toBe("Bean 2_1");
+    expect(
+      context1_1.getCachedBean<TestBean2_1>(TestBean2_1_Token).getName()
+    ).toBe("Bean 2_1");
   });
 
   it("Sibling context test", async () => {
-    expect((await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)).getName()).toBe(
-      "Bean 2_1"
-    );
-    expect((context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)).getName()).toBe(
-      "Bean 2_1"
-    );
-    expect((await context2_1.getBean<TestBean2_1>(TestBean2_1_Token))).not.toBe(
+    expect(
+      (await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)).getName()
+    ).toBe("Bean 2_1");
+    expect(
+      context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token).getName()
+    ).toBe("Bean 2_1");
+    expect(await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)).not.toBe(
       await context1_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token))).not.toBe(
+    expect(context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)).not.toBe(
       context1_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
   });
 
   it("Proxy context test", async () => {
     await context2_1.getBean<TestBean2_1>(TestBean2_1_Token);
-    context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
-    expect((await context2_2.getBean<TestBean2_1>(TestBean2_1_Token)).getName()).toBe(
-      "Bean 2_1"
-    );
-    expect((context2_2.getCachedBean<TestBean2_1>(TestBean2_1_Token)).getName()).toBe(
-      "Bean 2_1"
-    );
-    expect((await context2_2.getBean<TestBean2_1>(TestBean2_1_Token))).toBe(
+    context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token);
+    expect(
+      (await context2_2.getBean<TestBean2_1>(TestBean2_1_Token)).getName()
+    ).toBe("Bean 2_1");
+    expect(
+      context2_2.getCachedBean<TestBean2_1>(TestBean2_1_Token).getName()
+    ).toBe("Bean 2_1");
+    expect(await context2_2.getBean<TestBean2_1>(TestBean2_1_Token)).toBe(
       await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_2.getCachedBean<TestBean2_1>(TestBean2_1_Token))).toBe(
+    expect(context2_2.getCachedBean<TestBean2_1>(TestBean2_1_Token)).toBe(
       context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((await context2_2.getBean<TestBean2_1>(TestBean2_1_Token))).not.toBe(
+    expect(await context2_2.getBean<TestBean2_1>(TestBean2_1_Token)).not.toBe(
       await context1_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_2.getCachedBean<TestBean2_1>(TestBean2_1_Token))).not.toBe(
+    expect(context2_2.getCachedBean<TestBean2_1>(TestBean2_1_Token)).not.toBe(
       context1_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((await context2_2.getBean<TestBean2_1>(`${package2}.redirect`))).toBe(
+    expect(await context2_2.getBean<TestBean2_1>(`${package2}.redirect`)).toBe(
       await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_2.getCachedBean<TestBean2_1>(`${package2}.redirect`))).toBe(
+    expect(context2_2.getCachedBean<TestBean2_1>(`${package2}.redirect`)).toBe(
       context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((await context2_2.getBean<TestBean2_1>(`${package2}.2_1`))).toBe(
+    expect(await context2_2.getBean<TestBean2_1>(`${package2}.2_1`)).toBe(
       await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_2.getCachedBean<TestBean2_1>(`${package2}.2_1`))).toBe(
+    expect(context2_2.getCachedBean<TestBean2_1>(`${package2}.2_1`)).toBe(
       context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((await context2_2.getBean<TestBean2_1>(`${package2}.2_1-proxy`))).toBe(
+    expect(await context2_2.getBean<TestBean2_1>(`${package2}.2_1-proxy`)).toBe(
       await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_2.getCachedBean<TestBean2_1>(`${package2}.2_1-proxy`))).toBe(
+    expect(context2_2.getCachedBean<TestBean2_1>(`${package2}.2_1-proxy`)).toBe(
       context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((await context2_2.getBean<TestBean2_1>(TestBean2_1_TokenProxy))).toBe(
+    expect(await context2_2.getBean<TestBean2_1>(TestBean2_1_TokenProxy)).toBe(
       await context2_1.getBean<TestBean2_1>(TestBean2_1_Token)
     );
-    expect((context2_2.getCachedBean<TestBean2_1>(TestBean2_1_TokenProxy))).toBe(
+    expect(context2_2.getCachedBean<TestBean2_1>(TestBean2_1_TokenProxy)).toBe(
       context2_1.getCachedBean<TestBean2_1>(TestBean2_1_Token)
     );
   });
 
   it("Global scope test", async () => {
-    expect((await context2_1.getBean<TestBean2_2>(TestBean2_2_Token)).getName()).toBe(
-      "Global bean 2_2"
-    );
-    expect((context2_1.getCachedBean<TestBean2_2>(TestBean2_2_Token)).getName()).toBe(
-      "Global bean 2_2"
-    );
-    expect((await context2_1.getBean<TestBean2_2>(TestBean2_2_Token))).toBe(
+    expect(
+      (await context2_1.getBean<TestBean2_2>(TestBean2_2_Token)).getName()
+    ).toBe("Global bean 2_2");
+    expect(
+      context2_1.getCachedBean<TestBean2_2>(TestBean2_2_Token).getName()
+    ).toBe("Global bean 2_2");
+    expect(await context2_1.getBean<TestBean2_2>(TestBean2_2_Token)).toBe(
       await context1_1.getBean<TestBean2_2>(TestBean2_2_Token)
     );
-    expect((context2_1.getCachedBean<TestBean2_2>(TestBean2_2_Token))).toBe(
+    expect(context2_1.getCachedBean<TestBean2_2>(TestBean2_2_Token)).toBe(
       context1_1.getCachedBean<TestBean2_2>(TestBean2_2_Token)
     );
   });
 
   it("Prototype scope test", async () => {
-    expect((await context2_1.getBean<TestBean2_3>(TestBean2_3_Token)).getName()).toBe(
-      "Prototype bean 2_3"
-    );
-    expect((await context2_1.getBean<TestBean2_3>(TestBean2_3_Token))).not.toBe(
+    expect(
+      (await context2_1.getBean<TestBean2_3>(TestBean2_3_Token)).getName()
+    ).toBe("Prototype bean 2_3");
+    expect(await context2_1.getBean<TestBean2_3>(TestBean2_3_Token)).not.toBe(
       await context1_1.getBean<TestBean2_3>(TestBean2_3_Token)
-      );
-    expect(() => context2_1.getCachedBean<TestBean2_3>(TestBean2_3_Token)).toThrow();
+    );
+    expect(() =>
+      context2_1.getCachedBean<TestBean2_3>(TestBean2_3_Token)
+    ).toThrow();
   });
 
   it("Bean inheritance test", async () => {
-    expect((await context1_1.getBean<TestBean1_4>(TestBean1_4_Token)).getName()).toBe(
-      "Bean 1_4_Impl"
-    );
-    expect((context1_1.getCachedBean<TestBean1_4>(TestBean1_4_Token)).getName()).toBe(
-      "Bean 1_4_Impl"
-    );
-    expect((await context1_1.getBean<TestBean1_4>(TestBean1_4_Token)).bean1).toBe(
-      await context1_1.getBean<TestBean1_1>(TestBean1_1_Token)
-    );
-    expect((context1_1.getCachedBean<TestBean1_4>(TestBean1_4_Token)).bean1).toBe(
+    expect(
+      (await context1_1.getBean<TestBean1_4>(TestBean1_4_Token)).getName()
+    ).toBe("Bean 1_4_Impl");
+    expect(
+      context1_1.getCachedBean<TestBean1_4>(TestBean1_4_Token).getName()
+    ).toBe("Bean 1_4_Impl");
+    expect(
+      (await context1_1.getBean<TestBean1_4>(TestBean1_4_Token)).bean1
+    ).toBe(await context1_1.getBean<TestBean1_1>(TestBean1_1_Token));
+    expect(context1_1.getCachedBean<TestBean1_4>(TestBean1_4_Token).bean1).toBe(
       context1_1.getCachedBean<TestBean1_1>(TestBean1_1_Token)
     );
-    expect((await context1_1.getBean<TestBean1_4_Impl>(TestBean1_4_Token)).bean2).toBe(
-      await context1_1.getBean<TestBean1_2>(TestBean1_2_Token)
-    );
-    expect((context1_1.getCachedBean<TestBean1_4_Impl>(TestBean1_4_Token)).bean2).toBe(
-      context1_1.getCachedBean<TestBean1_2>(TestBean1_2_Token)
-    );
     expect(
-      (await context1_1.getBean<TestBean1_4_Impl>(TestBean1_4_Token)).getFullName()
+      (await context1_1.getBean<TestBean1_4_Impl>(TestBean1_4_Token)).bean2
+    ).toBe(await context1_1.getBean<TestBean1_2>(TestBean1_2_Token));
+    expect(
+      context1_1.getCachedBean<TestBean1_4_Impl>(TestBean1_4_Token).bean2
+    ).toBe(context1_1.getCachedBean<TestBean1_2>(TestBean1_2_Token));
+    expect(
+      (await context1_1.getBean<TestBean1_4_Impl>(
+        TestBean1_4_Token
+      )).getFullName()
     ).toBe("Bean 1_4_Impl Bean 1_1 Bean 1_2");
     expect(
-      (context1_1.getCachedBean<TestBean1_4_Impl>(TestBean1_4_Token)).getFullName()
+      context1_1
+        .getCachedBean<TestBean1_4_Impl>(TestBean1_4_Token)
+        .getFullName()
     ).toBe("Bean 1_4_Impl Bean 1_1 Bean 1_2");
   });
 
   it("Factory bean test", async () => {
-    expect(await context2_1.getBean<Symbol>(`${package2}.factory-singleton`)).toBe(
+    expect(
       await context2_1.getBean<Symbol>(`${package2}.factory-singleton`)
-    );
-    expect(context2_1.getCachedBean<Symbol>(`${package2}.factory-singleton`)).toBe(
+    ).toBe(await context2_1.getBean<Symbol>(`${package2}.factory-singleton`));
+    expect(
       context2_1.getCachedBean<Symbol>(`${package2}.factory-singleton`)
-    );
+    ).toBe(context2_1.getCachedBean<Symbol>(`${package2}.factory-singleton`));
     expect(
       await context2_1.getBean<Symbol>(`${package2}.factory-prototype`)
-    ).not.toBe(await context2_1.getBean<Symbol>(`${package2}.factory-prototype`));
+    ).not.toBe(
+      await context2_1.getBean<Symbol>(`${package2}.factory-prototype`)
+    );
     expect(
       context2_1.getCachedBean<Symbol>(`${package2}.factory-prototype`)
-    ).not.toBe(context2_1.getCachedBean<Symbol>(`${package2}.factory-prototype`));
+    ).not.toBe(
+      context2_1.getCachedBean<Symbol>(`${package2}.factory-prototype`)
+    );
   });
 
   it("Not found test", async () => {
@@ -246,7 +256,7 @@ describe("Core", () => {
     }
 
     if (!threw) {
-      throw new Error('expected to thow an error');
+      throw new Error("expected to thow an error");
     }
   });
 

@@ -25,11 +25,11 @@ export class JsonContext extends JsonUrlApplicationContext {
         [`${packagePoc}.bean2`, Bean_2_Token]
       ])
     );
-    super.configureBeansDefinitions();
+    super.configureBeansDefinitions(false);
   }
 
   async start() {
-    await super.startSchemaBeans();
+    await super.startSchemaBeans(false);
   }
 }
 

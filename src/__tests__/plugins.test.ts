@@ -5,7 +5,7 @@ import {
   ConsumerToken,
   ConsumerTest,
   ApplicationContextToken
-} from "../test/packagePlugins";
+} from "../tests/packagePlugins";
 import { registerAllTest, initMocks, deinitMocks, FactoryBean } from "..";
 import { ApplicationContextProvider } from "../org.springframework.context";
 

@@ -7,7 +7,7 @@ import {
   SimpleActor,
   SimpleActorToken,
   SimpleTransaction
-} from "../test/packageTransaction";
+} from "../tests/packageTransaction";
 
 //
 // Tests

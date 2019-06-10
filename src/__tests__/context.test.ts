@@ -4,7 +4,7 @@ import {
   TestContext,
   TestBean_1,
   TestBean_1_Token
-} from "../test/packageContext";
+} from "../tests/packageContext";
 
 //
 // Tests

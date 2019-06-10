@@ -1,0 +1,707 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>js-beans</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">js-beans</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> js-beans</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="js-beans"><code>js-beans</code></h1>
+				<h2 id="js-ts-ioc-in-java-spring-style-small-spring-core-features-">JS/TS IoC in Java Spring style (+ small spring core features).</h2>
+				<ul>
+					<li>Spring Core (IoC) for typescript и javascript.</li>
+					<li>Defines Spring Context (IoC + events), Beans terms.</li>
+					<li>Support hierarchical contexts with hierarchical event system.</li>
+					<li>Support bean scopes (singleton, prototype, global).</li>
+					<li>Support beans mappings using tokens (Symbol) and strings (i.e. &quot;bean1&quot;).</li>
+					<li>Support convinience beans testings using decorators and test context.</li>
+					<li>Has many tests and examples in tests folders.</li>
+					<li>Has production use in one bank for make complex engine based on PIXI/Konva.</li>
+				</ul>
+				<p>All beans are lazy loaded (by acquiring of @Autowire or beanFactory.getBean()).</p>
+				<p>If you want to collaborate, write me at <a href="mailto:arseniiboretskii@gmail.com">arseniiboretskii@gmail.com</a>.
+					I like Java and I like Spring.
+					If you know Spring, you know js-beans.
+				It is also helps Java developers to write frontend code.</p>
+				<h3 id="source-code-has-similar-classes-like-in-java-">Source code has similar classes like in Java:</h3>
+				<pre><code>src/java
+  ICloseable, Exception
+src/javax
+  @PostConstruct, @PreDestroy, @Transactional, ITransaction
+src/rxjava
+  @Disposable
+src/org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.beans</span>
+  @Autowired, AbstractBeanFactory, FactoryBean, IBeanFactory
+src/org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span>
+  @Bean, @bean, @EventListener, AbstractApplicationContext
+  IApplicationContext, IApplicationContextAware, IResourceLoader
+src/org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span>
+  ApplicationContextEvent, ApplicationContextStartEvent,
+  ApplicationContextStopEvent
+src/org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span>
+  ApplicationContextBeanRuntimeExceptionEvent,
+  ApplicationContextProvider, ApplicationEvent, ILifecycle
+src/org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.test</span>
+  @Test
+src/org<span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.transaction</span>
+  AbstractTransaction, AbstractTransactionManager</code></pre><h3 id="additional-has-different-meanings-rather-than-in-java-">Additional (has different meanings rather than in Java):</h3>
+				<pre><code><span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">javax</span> (<span class="hljs-variable">@Resource</span>)
+<span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span> (<span class="hljs-variable">@Throwable</span>, <span class="hljs-variable">@ThrowableAsync</span>, IThrowable)
+<span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span> (JsonUrlApplicationContext)
+<span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.context</span> (IApplicationContextLoader)
+<span class="hljs-selector-tag">src</span>/<span class="hljs-selector-tag">org</span><span class="hljs-selector-class">.springframework</span><span class="hljs-selector-class">.test</span> (<span class="hljs-variable">@AsyncTest</span>, <span class="hljs-variable">@Spy</span>, <span class="hljs-variable">@SpyOnGet</span>)</code></pre><h2 id="example-see-src-test-packagedemo-ts-and-src-__tests-demo-test-ts-">Example (see src/test/packageDemo.ts and src/__tests/demo.test.ts)</h2>
+				<ul>
+					<li>Dependencies: reflect-metadata (no other dependencies).</li>
+					<li>TS compile options: experimentalDecorators, emitDecoratorMetadata.</li>
+				</ul>
+				<pre><code>npm i
+npm <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-built_in">test</span></span></code></pre><p>Here is an example below wich contains:</p>
+				<ul>
+					<li>2 contexts: ApplicationContext &amp; ApplicationTestContext</li>
+					<li>@Configuration to replace existing bean</li>
+				</ul>
+				<pre><code><span class="hljs-keyword">import</span> {
+  <span class="hljs-type">Bean</span>,
+  <span class="hljs-type">Autowired</span>,
+  <span class="hljs-type">PostConstruct</span>,
+  <span class="hljs-type">PreDestroy</span>,
+  <span class="hljs-type">IApplicationContextAware</span>,
+  <span class="hljs-type">IApplicationContext</span>,
+  <span class="hljs-type">ApplicationEvent</span>,
+  <span class="hljs-type">EventListener</span>,
+  <span class="hljs-type">ApplicationContextStartEvent</span>,
+  <span class="hljs-type">AbstractApplicationContext</span>,
+  <span class="hljs-type">FactoryBean</span>,
+  <span class="hljs-type">Spy</span>,
+  <span class="hljs-type">Test</span>,
+  <span class="hljs-type">TWishedBeanOrFactory</span>,
+  <span class="hljs-type">AsyncTest</span>,
+  <span class="hljs-type">Disposable</span>,
+  <span class="hljs-type">TDisposer</span>,
+  <span class="hljs-type">Throwable</span>,
+  <span class="hljs-type">ApplicationContextBeanRuntimeExceptionEvent</span>,
+  <span class="hljs-type">ApplicationContextStopEvent</span>,
+  <span class="hljs-type">ThrowableAsync</span>,
+  <span class="hljs-type">Configuration</span>,
+  bean
+} from <span class="hljs-string">"js-beans"</span>;
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Tokens</span>
+<span class="hljs-comment">//</span>
+
+export const <span class="hljs-type">ApplicationContextToken</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">AbstractValueToken</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">ConcreteValueToken</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">Bean1Token</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">Bean2Token</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">Bean3Token</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">Bean1TestToken</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">ConfigurationToken</span> = <span class="hljs-type">Symbol</span>();
+export const <span class="hljs-type">CustomConsolePrefixToken</span> = <span class="hljs-type">Symbol</span>();
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// events.ts</span>
+<span class="hljs-comment">//</span>
+
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CustomApplicationEvent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ApplicationEvent</span> </span>{}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// bean1.ts</span>
+<span class="hljs-comment">//  singleton - every call to BeanFactory.getBean()</span>
+<span class="hljs-comment">//              will provide the same bean per context</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-meta">@Bean</span>(<span class="hljs-type">Bean1Token</span>)
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bean1</span> </span>{
+  <span class="hljs-meta">@Autowired</span>(<span class="hljs-type">Bean2Token</span>) bean2: <span class="hljs-type">Bean2</span>;
+
+  <span class="hljs-meta">@PostConstruct</span>
+  <span class="hljs-keyword">protected</span> construct() {}
+
+  <span class="hljs-meta">@PreDestroy</span>
+  <span class="hljs-keyword">protected</span> destruct() {}
+
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// Api</span>
+  <span class="hljs-comment">//</span>
+
+  public getSomething() {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// bean2.ts</span>
+<span class="hljs-comment">//   prototype - every call to BeanFactory.getBean()</span>
+<span class="hljs-comment">//               will provide new bean per context</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-meta">@Bean</span>(<span class="hljs-type">Bean2Token</span>, { scope: <span class="hljs-string">"prototype"</span> })
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bean2</span> <span class="hljs-title">implements</span> <span class="hljs-title">IApplicationContextAware</span> </span>{
+  <span class="hljs-meta">@Autowired</span>(<span class="hljs-type">ApplicationContextToken</span>) context: <span class="hljs-type">IApplicationContext</span>;
+  <span class="hljs-meta">@Autowired</span>(<span class="hljs-type">AbstractValueToken</span>) value: number;
+  <span class="hljs-meta">@Autowired</span>(<span class="hljs-type">CustomConsolePrefixToken</span>) prefix: string;
+
+  <span class="hljs-meta">@Disposable</span> disposer: <span class="hljs-type">TDisposer</span> = () =&gt;
+    console.log(`${<span class="hljs-keyword">this</span>.prefix} some resource has disposed`);
+
+  <span class="hljs-meta">@PostConstruct</span>
+  public construct() {
+    <span class="hljs-comment">/* all dependencies ready */</span>
+    <span class="hljs-keyword">this</span>.context.publishEvent(<span class="hljs-keyword">new</span> <span class="hljs-type">CustomApplicationEvent</span>());
+    <span class="hljs-comment">// All beans in current context and its parent contexts</span>
+    <span class="hljs-comment">//   will able to handle this message using @EventListener.</span>
+    <span class="hljs-comment">// See example below.</span>
+  }
+
+  <span class="hljs-meta">@PreDestroy</span>
+  public destruct() {
+    <span class="hljs-comment">/* close other non disposable resources */</span>
+  }
+
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// Api</span>
+  <span class="hljs-comment">//</span>
+
+  <span class="hljs-meta">@Throwable</span>()
+  public throwError() {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">Error</span>();
+    <span class="hljs-comment">// current context will broadcast</span>
+    <span class="hljs-comment">//   ApplicationContextBeanRuntimeExceptionEvent</span>
+    <span class="hljs-comment">// requires ApplicationContextAware to be implemented</span>
+    <span class="hljs-comment">// Reccomendations:</span>
+    <span class="hljs-comment">//   create UserNotifier service to show all error to user</span>
+    <span class="hljs-comment">//     from @Throwable functions</span>
+  }
+
+  <span class="hljs-meta">@ThrowableAsync</span>()
+  public async throwAsyncError() {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">Error</span>();
+    <span class="hljs-comment">// the same as throwError but in async code</span>
+  }
+
+  <span class="hljs-comment">//</span>
+  <span class="hljs-comment">// Event listeners</span>
+  <span class="hljs-comment">//</span>
+
+  <span class="hljs-meta">@EventListener</span>(<span class="hljs-type">ApplicationContextStartEvent</span> as any)
+  <span class="hljs-keyword">protected</span> handleApplicationContextStartEvent(
+    e: <span class="hljs-type">ApplicationContextStartEvent</span>
+  ) {
+    <span class="hljs-comment">// Application context started!</span>
+    <span class="hljs-comment">// All beans acquired in context start() function are instantiated</span>
+    <span class="hljs-comment">//   with their dependencies"</span>
+  }
+
+  <span class="hljs-meta">@EventListener</span>(<span class="hljs-type">ApplicationContextStopEvent</span> as any)
+  <span class="hljs-keyword">protected</span> handleApplicationContextStopEvent(e: <span class="hljs-type">ApplicationContextStopEvent</span>) {
+    <span class="hljs-comment">// Application context stoped!</span>
+    <span class="hljs-comment">// All beans destroyes and all disposables disposed</span>
+  }
+
+  <span class="hljs-meta">@EventListener</span>(<span class="hljs-type">ApplicationContextBeanRuntimeExceptionEvent</span> as any)
+  <span class="hljs-keyword">protected</span> handleApplicationContextBeanRuntimeExceptionEvent(
+    e: <span class="hljs-type">ApplicationContextBeanRuntimeExceptionEvent</span>
+  ) {
+    <span class="hljs-comment">// Somewhere in this context or in child context bean throwed an error!</span>
+    <span class="hljs-comment">// Show notification to user</span>
+    <span class="hljs-comment">// const error: Error = e.exception; // raised error</span>
+    <span class="hljs-comment">// const sourceContext = e.source; // context where error was raised</span>
+  }
+
+  <span class="hljs-meta">@EventListener</span>(<span class="hljs-type">CustomApplicationEvent</span> as any)
+  <span class="hljs-keyword">protected</span> handleCustomApplicationEvent(e: <span class="hljs-type">CustomApplicationEvent</span>) {
+    <span class="hljs-comment">// your custom event handler</span>
+  }
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// applicationContext.ts</span>
+<span class="hljs-comment">//</span>
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ApplicationContext</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractApplicationContext</span> </span>{
+  public configure() {
+    <span class="hljs-comment">// map tokens before context bootstrapping</span>
+    <span class="hljs-keyword">super</span>.configure(
+      <span class="hljs-keyword">new</span> <span class="hljs-type">Map</span>&lt;any, <span class="hljs-type">TWishedBeanOrFactory</span>&gt;([
+        [<span class="hljs-type">AbstractValueToken</span>, <span class="hljs-type">ConcreteValueToken</span>],
+        [<span class="hljs-type">ConcreteValueToken</span>, <span class="hljs-type">FactoryBean</span>.of(() =&gt; <span class="hljs-number">0</span>)]
+      ])
+    );
+  }
+
+  public start() {
+    <span class="hljs-comment">// bootstrap context</span>
+
+    <span class="hljs-comment">// instantiate bean1 with it's dependencies</span>
+    <span class="hljs-keyword">this</span>.getBean&lt;<span class="hljs-type">Bean1</span>&gt;(<span class="hljs-type">Bean1Token</span>);
+
+    <span class="hljs-keyword">super</span>.start();
+  }
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// applicationTestContext.ts</span>
+<span class="hljs-comment">//</span>
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ApplicationTestContext</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractApplicationContext</span> </span>{
+  public configure() {
+    <span class="hljs-keyword">super</span>.configure(
+      <span class="hljs-keyword">new</span> <span class="hljs-type">Map</span>&lt;any, <span class="hljs-type">TWishedBeanOrFactory</span>&gt;([
+        <span class="hljs-comment">// map tokens before test context bootstrapping</span>
+
+        <span class="hljs-comment">// replace original bean with test bean</span>
+        [<span class="hljs-type">Bean1Token</span>, <span class="hljs-type">Bean1TestToken</span>],
+        <span class="hljs-comment">// assign bean to token using factory wich calls every time</span>
+        <span class="hljs-comment">//   when BeanFactory.getBean() called</span>
+        [<span class="hljs-type">ConcreteValueToken</span>, <span class="hljs-type">FactoryBean</span>.of(() =&gt; <span class="hljs-number">0</span>)],
+        [<span class="hljs-type">CustomConsolePrefixToken</span>, <span class="hljs-type">FactoryBean</span>.of(() =&gt; `[<span class="hljs-type">CONSOLE</span> <span class="hljs-type">PREFIX</span>]:`)],
+        <span class="hljs-comment">// assign real bean to abstract token</span>
+        [<span class="hljs-type">AbstractValueToken</span>, <span class="hljs-type">ConcreteValueToken</span>]
+      ])
+    );
+  }
+
+  public start() {
+    <span class="hljs-comment">// bootstrap context</span>
+
+    <span class="hljs-comment">// instantiate value using FactoryBean</span>
+    <span class="hljs-keyword">this</span>.getBean(<span class="hljs-type">CustomConsolePrefixToken</span>); <span class="hljs-comment">// `[CONSOLE PREFIX]:`</span>
+
+    <span class="hljs-comment">// instantiate configuration (no @beans created)</span>
+    <span class="hljs-keyword">this</span>.getBean(<span class="hljs-type">ConfigurationToken</span>);
+
+    <span class="hljs-comment">// instantiate value using @bean from @Configuration</span>
+    <span class="hljs-comment">//   cause of configuration method consolePrefix() replaced the token</span>
+    <span class="hljs-keyword">this</span>.getBean(<span class="hljs-type">CustomConsolePrefixToken</span>); <span class="hljs-comment">// `[CUSTOM CONSOLE PREFIX]:`</span>
+
+    <span class="hljs-comment">// instantiate bean with it's dependencies</span>
+    <span class="hljs-keyword">this</span>.getBean&lt;<span class="hljs-type">Bean1</span>&gt;(<span class="hljs-type">Bean1Token</span>);
+
+    <span class="hljs-keyword">super</span>.start();
+  }
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Bean1Test.ts</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-meta">@Bean</span>(<span class="hljs-type">Bean1TestToken</span>)
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bean1Test</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Bean1</span> </span>{
+  <span class="hljs-meta">@Spy</span> public getSomething() {
+    <span class="hljs-comment">/* usual jest spy */</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">super</span>.getSomething();
+  }
+
+  <span class="hljs-meta">@Test</span>
+  public test1() {
+    expect(<span class="hljs-keyword">this</span>.getSomething()).toBe(<span class="hljs-number">0</span>);
+    expect(<span class="hljs-keyword">this</span>.getSomething).toBeCalled(); <span class="hljs-comment">// check spy</span>
+  }
+
+  <span class="hljs-meta">@AsyncTest</span>
+  public async test2() {
+    <span class="hljs-comment">/* await operations */</span>
+  }
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Bean3.ts</span>
+<span class="hljs-comment">//   singleton bean for all contexts</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-meta">@Bean</span>(<span class="hljs-type">Bean3Token</span>, { scope: <span class="hljs-string">"global"</span> })
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bean3Test</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Bean1</span> </span>{}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Configuration.ts</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-meta">@Configuration</span>(<span class="hljs-type">ConfigurationToken</span>)
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ApplicationConfiguration</span> </span>{
+  <span class="hljs-meta">@bean</span>(<span class="hljs-type">CustomConsolePrefixToken</span>)
+  public consolePrefix() {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">"[CUSTOM CONSOLE PREFIX]:"</span>;
+  }
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// ChildContext.ts</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   /*</span>
+<span class="hljs-comment">//    * context inheritance</span>
+<span class="hljs-comment">//    *   now BeanFactory.getBean() works as following:</span>
+<span class="hljs-comment">//    *   1. search bean in current context, if found return it</span>
+<span class="hljs-comment">//    *   2. search bean in parent context, if found return it,</span>
+<span class="hljs-comment">//    *        if not in parent's parent and so on</span>
+<span class="hljs-comment">//    *   3. if in parent tree bean not found instantiate it in child context</span>
+<span class="hljs-comment">//    *        (if in child context abstract token is mapped to real)</span>
+<span class="hljs-comment">//    *   4. if no suitable bean found and it is not required</span>
+<span class="hljs-comment">//    *        (e.g. getBean() called with false as 2 argument)</span>
+<span class="hljs-comment">//    *        then just return null, otherwise throw error</span>
+<span class="hljs-comment">//    * usage:</span>
+<span class="hljs-comment">//    */</span>
+<span class="hljs-comment">//   const parentContext = new ApplicationContext();</span>
+<span class="hljs-comment">//   parentContext.configure();</span>
+<span class="hljs-comment">//   parentContext.start();</span>
+<span class="hljs-comment">//   const childContext = new ChildContext()</span>
+<span class="hljs-comment">//   childContext.configure();</span>
+<span class="hljs-comment">//   childContext.setParent(parentContext); // !!!</span>
+<span class="hljs-comment">//   childContext.start();</span>
+<span class="hljs-comment">//</span>
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ChildContext</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractApplicationContext</span> </span>{
+  <span class="hljs-comment">/* ... */</span>
+  <span class="hljs-comment">/* here the same logic as in any other context */</span>
+}
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// !!! main.ts</span>
+<span class="hljs-comment">//   instantiate your application here</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// const applicationContext = new ApplicationContext();</span>
+<span class="hljs-comment">// ApplicationContextProvider.get().setApplicationContext(applicationContext);</span>
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// !!! Not beans files.ts</span>
+<span class="hljs-comment">//   maybe you want to use IoC somewhere else</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// const isRequired: boolean = false;</span>
+<span class="hljs-comment">// const extraMapOnlyForSpecificCall = new Map&lt;any, TWishedBeanOrFactory&gt;([</span>
+<span class="hljs-comment">//   /* remap existings tokens only for specific call */</span>
+<span class="hljs-comment">//   [AbstractValueToken, FactoryBean.of(() =&gt; 1)]</span>
+<span class="hljs-comment">// ])</span>
+<span class="hljs-comment">// const bean1 = ApplicationContextProvider.get().getApplicationContext()</span>
+<span class="hljs-comment">//   .getBean(Bean1Token, isRequired, extraMapOnlyForOneCall)</span>
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// !!! React files.ts</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// const applicationContext = ApplicationContextProvider.get()</span>
+<span class="hljs-comment">//   .getApplicationContext();</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// class ReactComponent extends React.Component {</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   constructor() {</span>
+<span class="hljs-comment">//      const bean1 = applicationContext.getBean(Bean1Token);</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   @Throwable(applicationContext)</span>
+<span class="hljs-comment">//   handleClick() {</span>
+<span class="hljs-comment">//     throw new Error("method not implemented");</span>
+<span class="hljs-comment">//     // applicationContext will broadcast</span>
+<span class="hljs-comment">//     //   ApplicationContextBeanRuntimeExceptionEvent</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//   render() {</span>
+<span class="hljs-comment">//     return (&lt;Button onClick={this.handleClick} /&gt;);</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">//</span></code></pre><h3 id="receipts">Receipts</h3>
+				<p>see src/<strong>tests</strong> to run receipt packages:</p>
+				<ul>
+					<li>src/test/packagePlugins.ts - demonstrates how to use chaining of optional
+					plugable beans in case you want to modify your bean beahaviour using Proxy.</li>
+					<li>src/test/package1.ts &amp; src/package2.ts - demonstrates how to use
+					two contexts and different scopes (prototype and so one).</li>
+					<li>src/test/packageDemo.ts - contains example from this readme.</li>
+					<li>src/test/packagePoc.ts - demonstrates how to use hierachical contexts.</li>
+					<li>src/test/packageFactoryBean.ts - demonstrates how to use beans resolvers.</li>
+					<li>src/test/packageTransactions.ts - demonstrates how to use transactions.</li>
+					<li>src/test/packageContext.ts - demonstrates basic IoC functionality.</li>
+					<li>src/test/packageContextLoader.ts - example how to load context from url.</li>
+				</ul>
+				<h3 id="limitations">Limitations</h3>
+				<ul>
+					<li>Currently injection available using @Autowire (setter) and @bean (method),
+					there is no constructor injections.</li>
+					<li>Currently there is no type cheking in runtime.</li>
+				</ul>
+				<h3 id="changelist">Changelist</h3>
+				<p>version 1 - synchronous context and bean instantiation, all resources (@resource) loaded at context initialization (bad practice)
+					version 2 - added rollup.js (now all dist code packed to single files index.js and index.d.ts)
+					version 3 - asynchronous context and beans instantiation with resources loading (@resource) at bean instantiating time (good practice)
+				vesrion 3.1.1 - added asynchronous to @PostConstruct method</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___context_test_.html">"__tests__/context.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___contextloader_test_.html">"__tests__/context<wbr>Loader.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___core_test_.html">"__tests__/core.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___demo_test_.html">"__tests__/demo.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___factorybean_test_.html">"__tests__/factory<wbr>Bean.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___plugins_test_.html">"__tests__/plugins.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___poc_test_.html">"__tests__/poc.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/___tests___transaction_test_.html">"__tests__/transaction.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_java_closeable_.html">"java/closeable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_java_core_.html">"java/core"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_java_exception_.html">"java/exception"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_java_index_.html">"java/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_javax_annotations_.html">"javax/annotations"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_javax_index_.html">"javax/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_javax_transaction_.html">"javax/transaction"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_beans_abstractbeanfactory_.html">"org.springframework.beans/abstract<wbr>Bean<wbr>Factory"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_beans_annotations_.html">"org.springframework.beans/annotations"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_beans_factory_.html">"org.springframework.beans/factory"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_beans_factorybean_.html">"org.springframework.beans/factory<wbr>Bean"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_beans_index_.html">"org.springframework.beans/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_abstractapplicationcontext_.html">"org.springframework.context/abstract<wbr>Application<wbr>Context"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_annotations_.html">"org.springframework.context/annotations"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_applicationcontext_.html">"org.springframework.context/application<wbr>Context"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_applicationcontextevent_.html">"org.springframework.context/application<wbr>Context<wbr>Event"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_applicationcontextloader_.html">"org.springframework.context/application<wbr>Context<wbr>Loader"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_applicationcontextprovider_.html">"org.springframework.context/application<wbr>Context<wbr>Provider"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_applicationevent_.html">"org.springframework.context/application<wbr>Event"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_index_.html">"org.springframework.context/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_jsonurlapplicationcontext_.html">"org.springframework.context/json<wbr>Url<wbr>Application<wbr>Context"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_lifecycle_.html">"org.springframework.context/lifecycle"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_context_resourceloader_.html">"org.springframework.context/resource<wbr>Loader"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_test_annotations_.html">"org.springframework.test/annotations"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_test_index_.html">"org.springframework.test/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_test_tools_.html">"org.springframework.test/tools"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_transaction_abstracttransaction_.html">"org.springframework.transaction/abstract<wbr>Transaction"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_transaction_abstracttransactionmanager_.html">"org.springframework.transaction/abstract<wbr>Transaction<wbr>Manager"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_org_springframework_transaction_index_.html">"org.springframework.transaction/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_rxjava_annotations_.html">"rxjava/annotations"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_rxjava_index_.html">"rxjava/index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_package1_.html">"tests/package1"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_package2_.html">"tests/package2"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packagecontext_.html">"tests/package<wbr>Context"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packagecontextloader_.html">"tests/package<wbr>Context<wbr>Loader"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packagedemo_.html">"tests/package<wbr>Demo"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packagefactorybean_.html">"tests/package<wbr>Factory<wbr>Bean"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packageplugins_.html">"tests/package<wbr>Plugins"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packagepoc_.html">"tests/package<wbr>Poc"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_tests_packagetransaction_.html">"tests/package<wbr>Transaction"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
