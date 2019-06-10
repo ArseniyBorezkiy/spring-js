@@ -21,7 +21,7 @@
     "assemble": "rimraf dist && tsc && babel dist -d dist",
     "build": "rollup -c rollup.lib.config.js",
     "test": "jest --no-cache",
-    "doc": "rimraf -rf ./docs && typedoc --out ./docs --exclude **/*tests*/* ./src",
+    "doc": "typedoc --out ./docs --exclude **/*tests*/* ./src",
     "test:clear": "jest --clearCache"
   },
   "peerDependencies": {
