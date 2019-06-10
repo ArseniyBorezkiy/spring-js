@@ -87,10 +87,9 @@
     ]
   },
   "keywords": [
-    "IoC",
-    "Spring",
-    "Spring-core",
-    "beans"
+    "spring",
+    "framework",
+    "IoC"
   ],
   "license": "ISC"
 }
