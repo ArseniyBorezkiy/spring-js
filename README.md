@@ -8,6 +8,7 @@
 - Support bean scopes (singleton, prototype, global).
 - Support beans mappings using tokens (Symbol) and strings (i.e. "bean1").
 - Support convinience beans testings using decorators and test context.
+- Support json context based configuration files (like ClassPathXmlApplicationContext in java).
 - Has many tests and examples in tests folders.
 - Has production use in one bank for make complex engine based on PIXI/Konva.
 
@@ -56,6 +57,27 @@ src/org.springframework.context (@Throwable, @ThrowableAsync, IThrowable)
 src/org.springframework.context (JsonUrlApplicationContext)
 src/org.springframework.context (IApplicationContextLoader)
 src/org.springframework.test (@AsyncTest, @Spy, @SpyOnGet)
+```
+
+## Example of context configuration file
+
+```
+{
+  "beansDefinition": [
+    {
+      "abstraction": "com.yourproject.logger",
+      "support": "com.yourproject.logger.support.consoleLogger"
+    }
+  ],
+  "beans": [
+    { "id": "com.yourproject.logger", "optional": false }
+  ]
+}
+
+// Where:
+// beansDefinition - beans names mapping.
+// beans - beans to instantiate at context start.
+// See JsonApplicationContext api reference of tests suite for more details.
 ```
 
 ## Example (see src/test/packageDemo.ts and src/\_\_tests/demo.test.ts)
