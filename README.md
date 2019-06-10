@@ -1,4 +1,4 @@
-# `spring-js`
+# `spring-framework`
 
 ## JS/TS IoC in Java Spring style (+ small spring core features).
 
