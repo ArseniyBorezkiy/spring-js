@@ -11,21 +11,21 @@ import {
  * Register all test in bean.
  * @param token - bean token.
  * @param type - bean class.
- * @param context - context from retrieve bean.
+ * @param contextGetter - getter of context from retrieve bean.
  */
 export function registerAllTest(
   token: Symbol,
   type: any,
-  context: AbstractApplicationContext
+  contextGetter: () => AbstractApplicationContext
 ) {
   if (Reflect.hasMetadata(testsToken, type)) {
     const keys = Reflect.getMetadata(testsToken, type);
     for (let i = 0; i < keys.length; ++i) {
       const name = keys[i];
       it(name, async () => {
-        const bean = await context.getBean(token);
+        const bean = await contextGetter().getBean(token);
         const f = bean[name];
-        f.call(bean, context);
+        f.call(bean, contextGetter());
       });
     }
   }
@@ -35,9 +35,9 @@ export function registerAllTest(
     for (let i = 0; i < keys.length; ++i) {
       const name = keys[i];
       it(name, async () => {
-        const bean = await context.getBean(token);
+        const bean = await contextGetter().getBean(token);
         const f = bean[name];
-        await f.call(bean, context);
+        await f.call(bean, contextGetter());
       });
     }
   }

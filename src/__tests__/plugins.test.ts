@@ -34,5 +34,5 @@ describe("Plugins", () => {
     applicationTestContext.close();
   });
 
-  registerAllTest(ConsumerToken, ConsumerTest, applicationTestContext);
+  registerAllTest(ConsumerToken, ConsumerTest, () => applicationTestContext);
 });

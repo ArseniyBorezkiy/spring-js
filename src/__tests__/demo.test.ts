@@ -34,5 +34,5 @@ describe("Demo", () => {
     applicationTestContext.close();
   });
 
-  registerAllTest(Bean1Token, Bean1Test, applicationTestContext);
+  registerAllTest(Bean1Token, Bean1Test, () => applicationTestContext);
 });
