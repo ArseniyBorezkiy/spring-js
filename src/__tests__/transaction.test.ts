@@ -24,26 +24,33 @@ describe("Transaction core", () => {
     transactionManager = null;
   });
 
-  it("Transaction commit test", () => {
+  it("Transaction commit test", async () => {
     expect(transactionManager.getStatus()).toBe(ETransactionStatus.closed);
-    transactionManager.begin();
+    await transactionManager.begin();
     expect(transactionManager.getStatus()).toBe(ETransactionStatus.opened);
-    transactionManager.commit();
+    await transactionManager.commit();
     expect(transactionManager.getStatus()).toBe(ETransactionStatus.commited);
   });
 
-  it("Transaction incorrect usage test", () => {
-    expect(() => transactionManager.commit()).toThrow(
-      TransactionRequiredException
-    );
-    expect(() => transactionManager.rollback()).toThrow(
-      TransactionRequiredException
-    );
+  it("Transaction incorrect usage test", async () => {
+    try {
+      await transactionManager.commit();
+      throw new Error("Expected function throws error");
+    } catch (e) {
+      expect(e instanceof TransactionRequiredException).toBe(true);
+    }
+
+    try {
+      await transactionManager.rollback();
+      throw new Error("Expected function throws error");
+    } catch (e) {
+      expect(e instanceof TransactionRequiredException).toBe(true);
+    }
   });
 
-  it("Transaction rollback test", () => {
-    transactionManager.begin();
-    transactionManager.rollback();
+  it("Transaction rollback test", async () => {
+    await transactionManager.begin();
+    await transactionManager.rollback();
     expect(transactionManager.getStatus()).toBe(ETransactionStatus.rollbacked);
   });
 });
@@ -62,7 +69,7 @@ describe("Transaction in context", () => {
 
   it("Transation without errors", async () => {
     const actor = await context.getBean<SimpleActor>(SimpleActorToken);
-    actor.methodWithoudErrors();
+    await actor.methodWithoudErrors();
     expect(actor.transactionManager.getStatus()).toBe(
       ETransactionStatus.commited
     );
@@ -71,7 +78,7 @@ describe("Transaction in context", () => {
   it("Transation with errors", async () => {
     const actor = await context.getBean<SimpleActor>(SimpleActorToken);
     try {
-      actor.methodWithErrors();
+      await actor.methodWithErrors();
     } catch (e) {
       expect(actor.transactionManager.getStatus()).toBe(
         ETransactionStatus.rollbacked
@@ -81,7 +88,8 @@ describe("Transaction in context", () => {
 
   it("Deep calls without errors", async () => {
     const actor = await context.getBean<SimpleActor>(SimpleActorToken);
-    expect(actor.methodDeepWithoutErrors()).toBe(1);
+    const result = await actor.methodDeepWithoutErrors();
+    expect(result).toBe(1);
     const transaction1 = actor.transactionManager.getTransaction<
       SimpleTransaction
     >();

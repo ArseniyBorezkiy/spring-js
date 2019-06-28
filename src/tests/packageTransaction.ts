@@ -37,9 +37,9 @@ export class SimpleTransaction extends AbstractTransaction {
 }
 
 export class SimpleTransactionManager extends AbstractTransactionManager {
-  public begin() {
+  public async begin(): Promise<void> {
     this.transaction = new SimpleTransaction();
-    super.begin(null);
+    await super.begin(null);
   }
 }
 
@@ -54,20 +54,20 @@ export class SimpleActor implements ITransactional {
   public transactionManager = new SimpleTransactionManager();
 
   @Transactional()
-  public methodWithoudErrors() {}
+  public async methodWithoudErrors(): Promise<void> {}
 
   @Transactional()
-  public methodWithErrors() {
+  public async methodWithErrors(): Promise<void> {
     throw new Error("my test error");
   }
 
   @Transactional()
-  public methodDeepWithoutErrors() {
-    return this.method1();
+  public async methodDeepWithoutErrors(): Promise<number> {
+    return await this.method1();
   }
 
   @Transactional()
-  private method1() {
+  private async method1(): Promise<number> {
     return 1;
   }
 }

@@ -33,11 +33,11 @@ export interface ITransaction {
  * @remark https://docs.oracle.com/javaee/7/api/javax/transaction/TransactionManager.html
  */
 export interface ITransactionManager {
-  begin(params: ITransactionParams);
-  commit();
-  rollback();
-  suspend();
-  resume();
+  begin(params: ITransactionParams): Promise<void>;
+  commit(): Promise<void>;
+  rollback(): Promise<void>;
+  suspend(): void;
+  resume(): void;
   getStatus(): ETransactionStatus;
   getTransaction<T extends ITransaction>(): T;
 }

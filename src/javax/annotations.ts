@@ -78,18 +78,19 @@ export function Transactional(params?: ITransactionParams) {
     const originalMethod = descriptor.value;
 
     descriptor.value = function() {
+      const args = arguments;
+
       const transactionManager = this.transactionManager;
       let result = null;
 
-      try {
-        const transactionParams = { target: this };
+      const transactionParams = { target: this };
 
-        if (params) {
-          Object.assign(transactionParams, params);
-        }
+      if (params) {
+        Object.assign(transactionParams, params);
+      }
 
-        transactionManager.begin(transactionParams);
-        result = originalMethod.apply(this, arguments);
+      return transactionManager.begin(transactionParams).then(() => {
+        result = originalMethod.apply(this, args);
         if (result instanceof Promise) {
           const promise = result;
           promise
@@ -104,12 +105,8 @@ export function Transactional(params?: ITransactionParams) {
         } else {
           transactionManager.commit();
         }
-      } catch (e) {
-        transactionManager.rollback();
-        throw e;
-      }
-
-      return result;
+        return result;
+      });
     };
 
     return descriptor;

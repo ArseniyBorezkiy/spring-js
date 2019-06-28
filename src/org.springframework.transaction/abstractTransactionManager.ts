@@ -29,14 +29,14 @@ export abstract class AbstractTransactionManager
   /**
    * start transaction
    */
-  public begin(params: ITransactionParams) {
+  public async begin(params: ITransactionParams): Promise<void> {
     this.semaphore += 1;
   }
 
   /**
    * commit transaction
    */
-  public commit() {
+  public async commit(): Promise<void> {
     this.semaphore -= 1;
 
     if (!this.transaction) {
@@ -51,7 +51,7 @@ export abstract class AbstractTransactionManager
   /**
    * rollback transaction
    */
-  public rollback() {
+  public async rollback(): Promise<void> {
     this.semaphore -= 1;
 
     if (!this.transaction) {
@@ -66,14 +66,14 @@ export abstract class AbstractTransactionManager
   /**
    * suspend transaction
    */
-  public suspend() {
+  public suspend(): void {
     this.suspended = true;
   }
 
   /**
    * resume transaction
    */
-  public resume() {
+  public resume(): void {
     this.suspended = false;
   }
 
