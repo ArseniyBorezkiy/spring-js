@@ -78,35 +78,35 @@ export function Transactional(params?: ITransactionParams) {
     const originalMethod = descriptor.value;
 
     descriptor.value = function() {
+      const self = this;
       const args = arguments;
-
       const transactionManager = this.transactionManager;
-      let result = null;
-
       const transactionParams = { target: this };
 
       if (params) {
         Object.assign(transactionParams, params);
       }
 
-      return transactionManager.begin(transactionParams).then(() => {
-        result = originalMethod.apply(this, args);
-        if (result instanceof Promise) {
-          const promise = result;
-          promise
-            .then(result => {
-              transactionManager.commit();
-              return result;
-            })
-            .catch(e => {
-              transactionManager.rollback();
-              throw e;
-            });
-        } else {
-          transactionManager.commit();
+      async function runInTransaction() {
+        await transactionManager.begin(transactionParams);
+        const promise = originalMethod.apply(self, args);
+        if (!(promise instanceof Promise)) {
+          throw new Error(
+            `Expected promise to be returned from @Transactional functions`
+          );
         }
-        return result;
-      });
+
+        try {
+          const result = await promise;
+          await transactionManager.commit();
+          return result;
+        } catch (e) {
+          await transactionManager.rollback();
+          throw e;
+        }
+      }
+
+      return runInTransaction();
     };
 
     return descriptor;
