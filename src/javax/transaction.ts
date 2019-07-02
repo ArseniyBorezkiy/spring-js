@@ -45,6 +45,7 @@ export interface ITransactionManager<TT> {
   begin(params: ITransactionParams<TT>): Promise<void>;
   commit(): Promise<void>;
   rollback(): Promise<void>;
+  close(): void;
   suspend(): void;
   resume(): void;
   getStatus(): ETransactionStatus;

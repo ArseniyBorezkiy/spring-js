@@ -22,7 +22,6 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
   /* constructor */
   constructor() {
     this.semaphore = 0;
-    this.operations = [];
   }
 
   //
@@ -39,6 +38,7 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
    */
   public async begin(params: ITransactionParams<T>): Promise<void> {
     if (this.semaphore === 0) {
+      this.operations = [];
       this.transaction = await this.transactionFactory();
     }
 
@@ -51,13 +51,11 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
    */
   public async commit(): Promise<void> {
     if (!this.transaction) {
-      this.operations = [];
       throw new TransactionRequiredException();
     }
 
     if (this.semaphore === 1) {
       await this.transaction.commit(this.operations);
-      this.operations = [];
     }
 
     this.semaphore -= 1;
@@ -68,7 +66,6 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
    */
   public async rollback(): Promise<void> {
     if (!this.transaction) {
-      this.operations = [];
       throw new TransactionRequiredException();
     }
 
@@ -81,8 +78,6 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
           this.transaction
         );
       }
-
-      this.operations = [];
     }
 
     this.semaphore -= 1;
@@ -100,6 +95,15 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
    */
   public resume(): void {
     this.suspended = false;
+  }
+
+  /**
+   * close transaction
+   */
+  public close(): void {
+    delete this.transaction;
+    this.operations = [];
+    this.semaphore = 0;
   }
 
   /**
