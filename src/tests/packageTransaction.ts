@@ -1,5 +1,10 @@
 import { TPackage } from "../java";
-import { Transactional, ITransactional } from "../javax";
+import {
+  Transactional,
+  ITransactional,
+  TTransactionOperation,
+  ITransactionManager
+} from "../javax";
 import {
   AbstractTransaction,
   AbstractTransactionManager
@@ -8,6 +13,7 @@ import {
   Bean,
   AbstractApplicationContext
 } from "../org.springframework.context";
+import { Autowired } from "../org.springframework.beans";
 
 //
 // Tokens
@@ -16,32 +22,7 @@ import {
 export const packageTransaction: TPackage =
   "org.springframework.test.transaction";
 export const SimpleActorToken = Symbol("SimpleActor");
-
-//
-// Simple Transaction Implemntation
-//
-
-export class SimpleTransaction extends AbstractTransaction {
-  public commites = 0;
-  public rollbacks = 0;
-
-  commit() {
-    this.commites += 1;
-    super.commit();
-  }
-
-  rollback() {
-    this.commites += 1;
-    super.rollback();
-  }
-}
-
-export class SimpleTransactionManager extends AbstractTransactionManager {
-  public async begin(): Promise<void> {
-    this.transaction = new SimpleTransaction();
-    await super.begin(null);
-  }
-}
+export const SimpleTransactionManagerToken = Symbol("SimpleTransactionManager");
 
 //
 // Context
@@ -49,25 +30,83 @@ export class SimpleTransactionManager extends AbstractTransactionManager {
 
 export class TestTransactionContext extends AbstractApplicationContext {}
 
+//
+// Simple Transaction Implemntation
+//
+
+export class SimpleTransaction extends AbstractTransaction {}
+
+@Bean(SimpleTransactionManagerToken)
+export class SimpleTransactionManager extends AbstractTransactionManager<
+  SimpleTransaction
+> {
+  public transactionFactory(): SimpleTransaction {
+    return new SimpleTransaction();
+  }
+}
+
+//
+// Simple Transaction Manager Implemntation
+//
+
 @Bean(SimpleActorToken)
-export class SimpleActor implements ITransactional {
-  public transactionManager = new SimpleTransactionManager();
+export class SimpleActor implements ITransactional<SimpleTransaction> {
+  @Autowired(SimpleTransactionManagerToken)
+  transactionManager?: ITransactionManager<SimpleTransaction>;
 
   @Transactional()
-  public async methodWithoudErrors(): Promise<void> {}
-
-  @Transactional()
-  public async methodWithErrors(): Promise<void> {
-    throw new Error("my test error");
+  public methodWithoutErrors(): TTransactionOperation {
+    return {
+      commit: async () => {},
+      rollback: async () => {}
+    };
   }
 
   @Transactional()
-  public async methodDeepWithoutErrors(): Promise<number> {
-    return await this.method1();
+  public methodWithErrors(): TTransactionOperation {
+    return {
+      commit: async () => {
+        throw new Error("Method throws error");
+      },
+      rollback: async () => {}
+    };
   }
 
   @Transactional()
-  private async method1(): Promise<number> {
-    return 1;
+  public methodDeepWithoutErrors(): TTransactionOperation {
+    return {
+      commit: async () => {
+        await this.methodShallowWithoutErrors();
+      },
+      rollback: async () => {}
+    };
+  }
+
+  @Transactional()
+  public methodDeepWithErrors(): TTransactionOperation {
+    return {
+      commit: async () => {
+        await this.methodShallowWithErrors();
+      },
+      rollback: async () => {}
+    };
+  }
+
+  @Transactional()
+  public methodShallowWithoutErrors(): TTransactionOperation {
+    return {
+      commit: async () => {},
+      rollback: async () => {}
+    };
+  }
+
+  @Transactional()
+  public methodShallowWithErrors(): TTransactionOperation {
+    return {
+      commit: async () => {
+        throw new Error("Method throws error");
+      },
+      rollback: async () => {}
+    };
   }
 }

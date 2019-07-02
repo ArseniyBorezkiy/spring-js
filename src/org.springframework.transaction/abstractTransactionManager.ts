@@ -3,7 +3,8 @@ import {
   ETransactionStatus,
   ITransaction,
   TransactionRequiredException,
-  ITransactionParams
+  ITransactionParams,
+  TTransactionOperation
 } from "../javax/transaction";
 
 /**
@@ -11,15 +12,17 @@ import {
  * Base implmentation of TransactionManager interface.
  * Implements semaphore way to manage keep single transaction via transactional-annotated functions deep calls.
  */
-export abstract class AbstractTransactionManager
-  implements ITransactionManager {
-  protected transaction: ITransaction;
+export abstract class AbstractTransactionManager<T extends ITransaction>
+  implements ITransactionManager<T> {
+  protected transaction: T;
   protected suspended: boolean;
   protected semaphore: number; // for deep function calls
+  protected operations: TTransactionOperation[]; // operations that constitutes transaction
 
   /* constructor */
   constructor() {
     this.semaphore = 0;
+    this.operations = [];
   }
 
   //
@@ -27,40 +30,62 @@ export abstract class AbstractTransactionManager
   //
 
   /**
+   * transaction provider
+   */
+  public abstract transactionFactory(): T;
+
+  /**
    * start transaction
    */
-  public async begin(params: ITransactionParams): Promise<void> {
+  public async begin(params: ITransactionParams<T>): Promise<void> {
+    if (this.semaphore === 0) {
+      this.transaction = this.transactionFactory();
+    }
+
     this.semaphore += 1;
+    this.operations.push(params.operation);
   }
 
   /**
    * commit transaction
    */
   public async commit(): Promise<void> {
-    this.semaphore -= 1;
-
     if (!this.transaction) {
+      this.operations = [];
       throw new TransactionRequiredException();
     }
 
-    if (this.semaphore === 0) {
-      this.transaction.commit();
+    if (this.semaphore === 1) {
+      await this.transaction.commit(this.operations);
+      this.operations = [];
     }
+
+    this.semaphore -= 1;
   }
 
   /**
    * rollback transaction
    */
   public async rollback(): Promise<void> {
-    this.semaphore -= 1;
-
     if (!this.transaction) {
+      this.operations = [];
       throw new TransactionRequiredException();
     }
 
-    if (this.semaphore === 0) {
-      this.transaction.rollback();
+    if (this.semaphore === 1) {
+      try {
+        await this.transaction.rollback(this.operations);
+      } catch (e) {
+        console.error(
+          "Uncaughted exception in transaction rollback",
+          this.transaction
+        );
+      }
+
+      this.operations = [];
     }
+
+    this.semaphore -= 1;
   }
 
   /**
@@ -89,7 +114,7 @@ export abstract class AbstractTransactionManager
   /**
    * get transaction object
    */
-  public getTransaction<T extends ITransaction>(): T {
-    return this.transaction as T;
+  public getTransaction(): T {
+    return this.transaction;
   }
 }

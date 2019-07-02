@@ -1,4 +1,9 @@
-import { ITransactionParams } from "./transaction";
+import {
+  ITransactionParams,
+  ITransaction,
+  ITransactionManager,
+  ETransactionStatus
+} from "./transaction";
 import { Exception } from "../java/exception";
 
 //
@@ -28,6 +33,10 @@ export const preDestroyHooksToken = Symbol();
 export const transactionalToken = Symbol();
 export const resourceDefinitionToken = Symbol();
 export const resourceDependenciesToken = Symbol();
+
+type ITransactionalParams = {
+  target?: any;
+};
 
 //
 // @PostConstruct
@@ -73,40 +82,36 @@ export function PreDestroy(target, key, descriptor) {
  * @remark https://docs.oracle.com/javaee/7/api/javax/transaction/Transactional.html
  * @param params - transaction params
  */
-export function Transactional(params?: ITransactionParams) {
+export function Transactional(params?: ITransactionalParams) {
   return function(target, key, descriptor) {
     const originalMethod = descriptor.value;
 
-    descriptor.value = function() {
+    descriptor.value = async function(...args) {
       const self = this;
-      const args = arguments;
-      const transactionManager = this.transactionManager;
-      const transactionParams = { target: this };
+      const transactionManager: ITransactionManager<ITransaction> = this
+        .transactionManager;
+      const transactionParams: ITransactionParams<ITransaction> = {
+        target: this,
+        operation: originalMethod.apply(self, args)
+      };
 
       if (params) {
         Object.assign(transactionParams, params);
       }
 
-      async function runInTransaction() {
-        await transactionManager.begin(transactionParams);
-        const promise = originalMethod.apply(self, args);
-        if (!(promise instanceof Promise)) {
-          throw new Error(
-            `Expected promise to be returned from @Transactional functions`
-          );
-        }
+      await transactionManager.begin(transactionParams);
 
-        try {
-          const result = await promise;
-          await transactionManager.commit();
-          return result;
-        } catch (e) {
-          await transactionManager.rollback();
+      try {
+        await transactionManager.commit();
+      } catch (e) {
+        await transactionManager.rollback();
+        if (
+          transactionManager.getTransaction().getStatus() !==
+          ETransactionStatus.rollbacked
+        ) {
           throw e;
         }
       }
-
-      return runInTransaction();
     };
 
     return descriptor;

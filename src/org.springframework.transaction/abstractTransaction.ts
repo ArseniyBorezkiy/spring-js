@@ -1,4 +1,8 @@
-import { ITransaction, ETransactionStatus } from "../javax/transaction";
+import {
+  ITransaction,
+  ETransactionStatus,
+  TTransactionOperation
+} from "../javax/transaction";
 
 /**
  * Abstract transaction.
@@ -6,6 +10,7 @@ import { ITransaction, ETransactionStatus } from "../javax/transaction";
  * @remark https://tinkerpop.apache.org/javadocs/3.3.0/full/org/apache/tinkerpop/gremlin/structure/util/AbstractTransaction.html
  */
 export class AbstractTransaction implements ITransaction {
+  protected commitingOperations: TTransactionOperation[] = [];
   private status: ETransactionStatus;
 
   /* constructor */
@@ -17,11 +22,22 @@ export class AbstractTransaction implements ITransaction {
   // Api
   //
 
-  public commit() {
+  public async commit(operations: TTransactionOperation[]): Promise<void> {
+    for (const operation of operations) {
+      this.commitingOperations.push(operation);
+      await operation.commit();
+    }
+
+    this.commitingOperations = [];
     this.status = ETransactionStatus.commited;
   }
 
-  public rollback() {
+  public async rollback(operations: TTransactionOperation[]): Promise<void> {
+    for (const operation of this.commitingOperations) {
+      await operation.rollback();
+    }
+
+    this.commitingOperations = [];
     this.status = ETransactionStatus.rollbacked;
   }
 

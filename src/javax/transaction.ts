@@ -1,10 +1,19 @@
 import { Exception } from "../java";
 
 /**
+ * Operation runned in transaction.
+ */
+export type TTransactionOperation = {
+  commit: () => Promise<void>;
+  rollback: () => Promise<void>;
+};
+
+/**
  * Params of the transaction (for transactional annotations).
  */
-export interface ITransactionParams {
-  target?: ITransactional;
+export interface ITransactionParams<TT> {
+  target?: ITransactional<TT>;
+  operation: TTransactionOperation;
 }
 
 /**
@@ -23,8 +32,8 @@ export enum ETransactionStatus {
  * Base interface for all transactions.
  */
 export interface ITransaction {
-  commit();
-  rollback();
+  commit(operations: TTransactionOperation[]): Promise<void>;
+  rollback(operations: TTransactionOperation[]): Promise<void>;
   getStatus(): ETransactionStatus;
 }
 
@@ -32,21 +41,21 @@ export interface ITransaction {
  * Allows to manage transactions.
  * @remark https://docs.oracle.com/javaee/7/api/javax/transaction/TransactionManager.html
  */
-export interface ITransactionManager {
-  begin(params: ITransactionParams): Promise<void>;
+export interface ITransactionManager<TT> {
+  begin(params: ITransactionParams<TT>): Promise<void>;
   commit(): Promise<void>;
   rollback(): Promise<void>;
   suspend(): void;
   resume(): void;
   getStatus(): ETransactionStatus;
-  getTransaction<T extends ITransaction>(): T;
+  getTransaction(): TT;
 }
 
 /**
  * Awareness of transactionManager instance (for transactional annotations).
  */
-export interface ITransactional {
-  transactionManager: ITransactionManager;
+export interface ITransactional<TT> {
+  transactionManager?: ITransactionManager<TT>;
 }
 
 /**
