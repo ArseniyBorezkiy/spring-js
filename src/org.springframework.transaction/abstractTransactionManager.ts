@@ -32,14 +32,14 @@ export abstract class AbstractTransactionManager<T extends ITransaction>
   /**
    * transaction provider
    */
-  public abstract transactionFactory(): T;
+  public abstract async transactionFactory(): Promise<T>;
 
   /**
    * start transaction
    */
   public async begin(params: ITransactionParams<T>): Promise<void> {
     if (this.semaphore === 0) {
-      this.transaction = this.transactionFactory();
+      this.transaction = await this.transactionFactory();
     }
 
     this.semaphore += 1;
